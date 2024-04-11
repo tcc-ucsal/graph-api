@@ -8,6 +8,6 @@ RUN mvn clean install
 # Stage 2: Run the application
 FROM openjdk:17-alpine
 WORKDIR /app
-COPY --from=build /app/target/graph-api-0.0.1-SNAPSHOT.jar ./graph-api.jar
+COPY --from=build /app/target/graph-api-0.0.1.jar ./graph-api.jar
 EXPOSE 8080
 CMD ["java", "-jar", "graph-api.jar"]
