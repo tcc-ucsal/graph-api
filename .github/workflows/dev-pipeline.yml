@@ -50,7 +50,7 @@ jobs:
       - name: Build and push BE
         uses: docker/build-push-action@v3
         with:
-          context: ./graph-api
-          file: ./graph-api/Dockerfile
+          context: .
+          file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/graph-api:latest
