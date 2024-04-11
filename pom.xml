@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.graphpedia</groupId>
 	<artifactId>graph-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>graph-api</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
