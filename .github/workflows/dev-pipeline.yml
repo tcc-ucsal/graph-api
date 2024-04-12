@@ -54,3 +54,14 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/graph-api:latest
+  
+  deploy:
+    needs: docker
+    runs-on: self-hosted
+    steps:
+        - name: Pull image from docker hub
+          run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/graph-api:latest
+        - name: Remove docker container
+          run: docker rm -f graph-api
+        - name: Run docker container
+          run: docker run -d -p 8080:8080 --name graph-api ${{ secrets.DOCKER_HUB_USERNAME }}/graph-api
