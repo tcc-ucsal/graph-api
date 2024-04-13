@@ -43,7 +43,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Remove docker container
-        run: sudo docker ps -a --filter ancestor=${{ secrets.DOCKER_HUB_USERNAME }}/graph-api --format "{{.ID}}" | xargs -r sudo docker rm -f
+        run: CONTAINER_ID=$(sudo docker ps -q --filter "publish=80" --format "{{.ID}}") if [ ! -z "$CONTAINER_ID" ]; then sudo docker stop $CONTAINER_ID $CONTAINER_ID fi
       - name: Pull image from docker hub
         run: sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/graph-api
       - name: Run docker container
