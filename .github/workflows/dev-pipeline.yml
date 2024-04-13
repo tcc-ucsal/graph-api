@@ -47,4 +47,4 @@ jobs:
       - name: Pull image from docker hub
         run: sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/graph-api
       - name: Run docker container
-        run: sudo docker run -d -p 8080:8080 --name ${{ secrets.DOCKER_HUB_USERNAME }}/graph-api
+        run: sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_HUB_USERNAME }}/graph-api
