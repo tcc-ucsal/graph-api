@@ -10,4 +10,4 @@ FROM openjdk:17-alpine
 WORKDIR /app
 COPY --from=build /app/target/graph-api-0.0.1.jar ./graph-api.jar
 EXPOSE 8080
-CMD ["java", "-jar", "graph-api.jar"]
+CMD ["java", "-Dspring.profiles.active=dev", "-jar", "graph-api.jar"]
