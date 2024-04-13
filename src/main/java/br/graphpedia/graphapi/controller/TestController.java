@@ -11,6 +11,6 @@ public class TestController {
 
     @GetMapping
     public ResponseEntity<String> test(){
-        return ResponseEntity.ok().body("DEU BOM!");
+        return ResponseEntity.ok().body("Teste Deploy funcionando!");
     }
 }
