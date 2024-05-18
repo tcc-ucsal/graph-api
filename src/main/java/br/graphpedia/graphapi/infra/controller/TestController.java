@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.controller;
+package br.graphpedia.graphapi.infra.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
