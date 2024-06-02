@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CreateTermService implements TermUseCase {
+public class TermService implements TermUseCase {
 
     private final ITermRepository iTermRepository;
 
     @Autowired
-    public CreateTermService(ITermRepository iTermRepository) {
+    public TermService(ITermRepository iTermRepository) {
         this.iTermRepository = iTermRepository;
     }
 
