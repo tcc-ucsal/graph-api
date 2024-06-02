@@ -10,15 +10,13 @@ import org.springframework.data.neo4j.core.schema.*;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
-@Node
+@Node("Term")
 public class TermEntity {
 
     @Id
@@ -38,6 +36,7 @@ public class TermEntity {
     private LocalDateTime updatedDate;
 
     @Relationship(type = "CONNECTION_WITH", direction = Relationship.Direction.OUTGOING)
-    private Set<ConnectionWithEntity> connections;
+    private Set<ConnectionWithEntity> connectionWiths;
+
 
 }

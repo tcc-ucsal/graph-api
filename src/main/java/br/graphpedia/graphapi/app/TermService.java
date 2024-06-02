@@ -6,6 +6,8 @@ import br.graphpedia.graphapi.core.usecase.TermUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TermService implements TermUseCase {
 
@@ -18,6 +20,14 @@ public class TermService implements TermUseCase {
 
     @Override
     public Term create(Term term) {
-        return null;
+        Term createdTerm = iTermRepository.create(term);
+        return createdTerm;
     }
+
+    @Override
+    public List<Term> findAll() {
+        return iTermRepository.findAll();
+    }
+
+
 }
