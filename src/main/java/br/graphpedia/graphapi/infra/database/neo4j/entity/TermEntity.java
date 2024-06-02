@@ -1,17 +1,12 @@
 package br.graphpedia.graphapi.infra.database.neo4j.entity;
 
-import br.graphpedia.graphapi.core.entity.Connection;
-import br.graphpedia.graphapi.core.entity.Term;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.neo4j.core.schema.*;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 import java.time.LocalDateTime;
@@ -27,10 +22,14 @@ import java.util.UUID;
 public class TermEntity {
 
     @Id
-    @GeneratedValue(UUIDStringGenerator.class)
-    private UUID id;
+    @GeneratedValue
+    private String id;
+
+    @Property("title")
     private String title;
+    @Property("description")
     private String description;
+    @Property("source")
     private String source;
 
     @CreatedDate
@@ -38,10 +37,7 @@ public class TermEntity {
     @LastModifiedDate
     private LocalDateTime updatedDate;
 
-    @Relationship(type = "CONNECTION", direction = Relationship.Direction.OUTGOING)
-    private Set<Connection> connections = new HashSet<>();
+    @Relationship(type = "CONNECTION_WITH", direction = Relationship.Direction.OUTGOING)
+    private Set<ConnectionWithEntity> connections;
 
-    public void addConnection(Term term, Integer level) {
-        this.connections.add(new Connection(UUID.randomUUID(), level, term));
-    }
 }
