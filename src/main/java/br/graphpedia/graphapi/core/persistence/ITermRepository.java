@@ -9,4 +9,7 @@ public interface ITermRepository {
     Term create(Term term);
 
     List<Term> findAll();
+
+    void deleteAll();
+
 }

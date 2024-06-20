@@ -9,4 +9,6 @@ public interface TermUseCase {
     Term create(Term term);
 
     List<Term> findAll();
+
+    void deleteAll();
 }

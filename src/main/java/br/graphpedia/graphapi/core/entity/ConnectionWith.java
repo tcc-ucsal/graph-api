@@ -1,9 +1,5 @@
 package br.graphpedia.graphapi.core.entity;
 
-import lombok.Builder;
-import lombok.Data;
-
-import java.util.UUID;
 
 public class ConnectionWith {
 

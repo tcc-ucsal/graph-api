@@ -29,4 +29,9 @@ public class TermRepositoryImpl implements ITermRepository {
         List<TermEntity> list = neo4jTermRepository.findAll();
         return TermNeo4jMapper.INSTANCE.toTermCore(list);
     }
+
+    public void deleteAll(){
+        neo4jTermRepository.deleteAll();
+    }
+
 }

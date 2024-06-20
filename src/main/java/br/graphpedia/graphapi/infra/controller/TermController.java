@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/term")
 public class TermController {
 
-    private TermUseCase termUseCase;
+    private final TermUseCase termUseCase;
 
     @Autowired
     public TermController(TermUseCase termUseCase) {
@@ -25,5 +25,11 @@ public class TermController {
     @GetMapping
     public ResponseEntity<Term> findAll(){
       return null;
+    }
+
+    @DeleteMapping("/all")
+    public ResponseEntity<Object> deleteAll(){
+        termUseCase.deleteAll();
+        return ResponseEntity.noContent().build();
     }
 }

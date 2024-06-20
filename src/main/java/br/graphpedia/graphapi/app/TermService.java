@@ -29,5 +29,10 @@ public class TermService implements TermUseCase {
         return iTermRepository.findAll();
     }
 
+    @Override
+    public void deleteAll() {
+        iTermRepository.deleteAll();
+    }
+
 
 }
