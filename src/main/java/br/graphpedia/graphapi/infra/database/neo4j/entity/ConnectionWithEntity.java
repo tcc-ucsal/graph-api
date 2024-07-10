@@ -9,10 +9,7 @@ import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 import java.util.UUID;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@Data
 @RelationshipProperties
 public class ConnectionWithEntity {
 
@@ -25,4 +22,37 @@ public class ConnectionWithEntity {
 
     @TargetNode
     private TermEntity targetTerm;
+
+    public ConnectionWithEntity() {
+    }
+
+    public ConnectionWithEntity(String id, Integer relevanceLevel, TermEntity targetTerm) {
+        this.id = id;
+        this.relevanceLevel = relevanceLevel;
+        this.targetTerm = targetTerm;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Integer getRelevanceLevel() {
+        return relevanceLevel;
+    }
+
+    public void setRelevanceLevel(Integer relevanceLevel) {
+        this.relevanceLevel = relevanceLevel;
+    }
+
+    public TermEntity getTargetTerm() {
+        return targetTerm;
+    }
+
+    public void setTargetTerm(TermEntity targetTerm) {
+        this.targetTerm = targetTerm;
+    }
 }

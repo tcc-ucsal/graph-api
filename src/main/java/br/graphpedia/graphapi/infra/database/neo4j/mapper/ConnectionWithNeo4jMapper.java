@@ -17,7 +17,6 @@ public interface ConnectionWithNeo4jMapper {
     ConnectionWith toConnectionWithCore(ConnectionWithEntity connectionWithEntity);
     Set<ConnectionWith> toConnectionWithCore(Set<ConnectionWithEntity> connectionWithEntity);
 
-    @Mapping(source = "targetTerm", target = "targetTerm")
     ConnectionWithEntity toConnectionWithEntity(ConnectionWith connectionWith);
     Set<ConnectionWithEntity> toConnectionWithEntity(Set<ConnectionWith> connectionWith);
 

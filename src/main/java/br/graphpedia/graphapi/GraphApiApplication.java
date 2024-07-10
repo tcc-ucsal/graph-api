@@ -1,11 +1,12 @@
 package br.graphpedia.graphapi;
 
+import br.graphpedia.graphapi.infra.database.neo4j.repository.Neo4jTermRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 
-@EnableNeo4jRepositories
+@EnableNeo4jRepositories(basePackageClasses = {Neo4jTermRepository.class})
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 public class GraphApiApplication {
 

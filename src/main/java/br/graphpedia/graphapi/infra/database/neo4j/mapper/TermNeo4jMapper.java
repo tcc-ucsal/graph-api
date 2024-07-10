@@ -1,6 +1,8 @@
 package br.graphpedia.graphapi.infra.database.neo4j.mapper;
 
+import br.graphpedia.graphapi.core.entity.ConnectionWith;
 import br.graphpedia.graphapi.core.entity.Term;
+import br.graphpedia.graphapi.infra.database.neo4j.entity.ConnectionWithEntity;
 import br.graphpedia.graphapi.infra.database.neo4j.entity.TermEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -8,6 +10,7 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper
 public interface TermNeo4jMapper {
@@ -33,9 +36,15 @@ public interface TermNeo4jMapper {
             @Mapping(source = "source", target = "source"),
             @Mapping(source = "createdDate", target = "createdDate"),
             @Mapping(source = "updatedDate", target = "updatedDate"),
-            @Mapping(target = "connectionWiths", expression = "java(ConnectionWithNeo4jMapper.INSTANCE.toConnectionWithEntity(term.getConnectionWiths()))")
+            @Mapping(target = "connectionWiths", expression = "java(connectionsToEntity(term.getConnectionWiths()))")
     })
     TermEntity toTermEntity(Term term);
     List<TermEntity> toTermEntity(List<Term> term);
 
+    default Set<ConnectionWithEntity> connectionsToEntity(Set<ConnectionWith> connections){
+        if(connections.isEmpty())
+            return null;
+
+        return ConnectionWithNeo4jMapper.INSTANCE.toConnectionWithEntity(connections);
+    }
 }

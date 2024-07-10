@@ -1,21 +1,18 @@
 package br.graphpedia.graphapi.infra.database.neo4j.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.neo4j.core.schema.*;
-import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@Setter
+@Getter
 @Builder
-@Data
 @Node("Term")
 public class TermEntity {
 
@@ -38,5 +35,26 @@ public class TermEntity {
     @Relationship(type = "CONNECTION_WITH", direction = Relationship.Direction.OUTGOING)
     private Set<ConnectionWithEntity> connectionWiths;
 
+    public TermEntity() {
+    }
+
+    public TermEntity(String id, String title, String description, String source, LocalDateTime createdDate, LocalDateTime updatedDate, Set<ConnectionWithEntity> connectionWiths) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.source = source;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
+        this.connectionWiths = connectionWiths;
+    }
+
+    public TermEntity(String id, String title, String description, String source, LocalDateTime createdDate, LocalDateTime updatedDate) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.source = source;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
+    }
 
 }
