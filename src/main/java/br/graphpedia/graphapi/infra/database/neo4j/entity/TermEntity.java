@@ -23,8 +23,7 @@ public class TermEntity {
 
     @Property("title")
     private String title;
-    @Property("description")
-    private String description;
+
     @Property("source")
     private String source;
 
@@ -39,20 +38,18 @@ public class TermEntity {
     public TermEntity() {
     }
 
-    public TermEntity(String id, String title, String description, String source, LocalDateTime createdDate, LocalDateTime updatedDate, Set<ConnectionWithEntity> connectionWiths) {
+    public TermEntity(String id, String title, String source, LocalDateTime createdDate, LocalDateTime updatedDate, Set<ConnectionWithEntity> connectionWiths) {
         this.id = id;
         this.title = title;
-        this.description = description;
         this.source = source;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.connectionWiths = connectionWiths;
     }
 
-    public TermEntity(String id, String title, String description, String source, LocalDateTime createdDate, LocalDateTime updatedDate) {
+    public TermEntity(String id, String title, String source, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.id = id;
         this.title = title;
-        this.description = description;
         this.source = source;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;

@@ -34,5 +34,11 @@ public class TermService implements TermUseCase {
         iTermRepository.deleteAll();
     }
 
+    @Override
+    public List<String> getSynonymTerms(String termTitle) {
+        return List.of();
+        //return List.of("Manga (Fruta), Manga (MG), Manga (Camisa), Manga (Fut)");
+    }
+
 
 }

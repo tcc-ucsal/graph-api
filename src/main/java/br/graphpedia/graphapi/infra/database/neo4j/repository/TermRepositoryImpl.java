@@ -36,13 +36,13 @@ public class TermRepositoryImpl implements ITermRepository {
     public Term create(Term term) {
         validateTerm(term);
         List<TermEntity> cratedEntity;
-        try{
+        try {
             String cypher = "MERGE (termC:Term {title: $term.title}) " +
-                    "ON CREATE SET termC.title = $term.title, " +
-                    "              termC.description = $term.description, " +
+                    "ON CREATE SET " +
+                    "              termC.title = $term.title, " +
                     "              termC.source = $term.source, " +
                     "              termC.createdDate = timestamp() " +
-                    "ON MATCH SET termC.description = $term.description, " +
+                    "ON MATCH SET " +
                     "              termC.source = $term.source, " +
                     "              termC.updatedDate = timestamp() " +
                     "WITH termC " +
@@ -58,19 +58,20 @@ public class TermRepositoryImpl implements ITermRepository {
                     .bind(Neo4jObjectConverter.convertToMap(term)).to("term")
                     .fetchAs(TermEntity.class)
                     .mappedBy((typeSystem, register) ->
-                            new TermEntity(register.get("id").asString(), register.get("title").asString(), register.get("description").asString(),
+                            new TermEntity(register.get("id").asString(), register.get("title").asString(),
                                     register.get("source").asString(),
                                     getLocalDateTimeByRecord(register, "createdDate"),
                                     getLocalDateTimeByRecord(register,"updatedDate")))
                     .all().stream().toList();
 
-        }catch (Exception exception){
+            return TermNeo4jMapper.INSTANCE.toTermCore(cratedEntity.stream().findFirst()
+                    .orElseThrow(() -> new PersistenceException("Access result error")));
+
+        } catch (Exception exception){
 
             throw new PersistenceException(exception.getMessage(), exception.getCause());
         }
 
-
-        return TermNeo4jMapper.INSTANCE.toTermCore(cratedEntity).get(0);
     }
 
     private static void validateTerm(Term term) {

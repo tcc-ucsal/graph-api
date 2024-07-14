@@ -11,4 +11,6 @@ public interface TermUseCase {
     List<Term> findAll();
 
     void deleteAll();
+
+    List<String> getSynonymTerms(String termTitle);
 }

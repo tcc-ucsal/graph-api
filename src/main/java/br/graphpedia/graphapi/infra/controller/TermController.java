@@ -1,5 +1,6 @@
 package br.graphpedia.graphapi.infra.controller;
 
+import br.graphpedia.graphapi.core.config.Routes;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.usecase.TermUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/term")
+@RequestMapping(Routes.TERM_PREFIX)
 public class TermController {
 
     private final TermUseCase termUseCase;
@@ -17,17 +18,17 @@ public class TermController {
         this.termUseCase = termUseCase;
     }
 
-    @PostMapping
+    @PostMapping(Routes.CREATE)
     public ResponseEntity<Term> create(@RequestBody Term term){
         return ResponseEntity.ok().body(termUseCase.create(term));
     }
 
-    @GetMapping
+    @GetMapping(Routes.FIND_ALL)
     public ResponseEntity<Term> findAll(){
       return null;
     }
 
-    @DeleteMapping("/all")
+    @DeleteMapping(Routes.DELETE_ALL)
     public ResponseEntity<Object> deleteAll(){
         termUseCase.deleteAll();
         return ResponseEntity.noContent().build();

@@ -8,7 +8,6 @@ import java.util.UUID;
 public class Term {
     private String id;
     private String title;
-    private String description;
     private String source;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
@@ -27,14 +26,6 @@ public class Term {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getSource() {
@@ -69,10 +60,9 @@ public class Term {
         this.connectionWiths = connectionWiths;
     }
 
-    public Term(String id, String title, String description, String source, LocalDateTime createdDate, LocalDateTime updatedDate, Set<ConnectionWith> connectionWiths) {
+    public Term(String id, String title, String source, LocalDateTime createdDate, LocalDateTime updatedDate, Set<ConnectionWith> connectionWiths) {
         this.id = id;
         this.title = title;
-        this.description = description;
         this.source = source;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;

@@ -1,5 +1,6 @@
-package br.graphpedia.graphapi.core.expections;
+package br.graphpedia.graphapi.core.config;
 
+import br.graphpedia.graphapi.core.expections.ErrorResponse;
 import br.graphpedia.graphapi.core.expections.business.BadRequestException;
 import br.graphpedia.graphapi.core.expections.database.PersistenceException;
 import org.springframework.http.HttpStatus;
