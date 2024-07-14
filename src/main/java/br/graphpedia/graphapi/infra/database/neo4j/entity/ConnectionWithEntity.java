@@ -1,14 +1,11 @@
 package br.graphpedia.graphapi.infra.database.neo4j.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.neo4j.core.schema.*;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
-import java.util.UUID;
-
+@Setter
+@Getter
 @Builder
 @RelationshipProperties
 public class ConnectionWithEntity {
@@ -32,27 +29,4 @@ public class ConnectionWithEntity {
         this.targetTerm = targetTerm;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Integer getRelevanceLevel() {
-        return relevanceLevel;
-    }
-
-    public void setRelevanceLevel(Integer relevanceLevel) {
-        this.relevanceLevel = relevanceLevel;
-    }
-
-    public TermEntity getTargetTerm() {
-        return targetTerm;
-    }
-
-    public void setTargetTerm(TermEntity targetTerm) {
-        this.targetTerm = targetTerm;
-    }
 }
