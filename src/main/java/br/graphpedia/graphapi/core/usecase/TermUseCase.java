@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface TermUseCase {
 
-    Term create(Term term);
+    Term create(String term);
+
+    Term createTest(Term term);
 
     List<Term> findAll();
 

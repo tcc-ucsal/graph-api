@@ -19,7 +19,13 @@ public class TermService implements TermUseCase {
     }
 
     @Override
-    public Term create(Term term) {
+    public Term create(String term) {
+
+        return null;
+    }
+
+    @Override
+    public Term createTest(Term term) {
         Term createdTerm = iTermRepository.create(term);
         return createdTerm;
     }

@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.core.config;
+package br.graphpedia.graphapi.infra.controller.interceptor;
 
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.usecase.TermUseCase;

@@ -1,5 +1,6 @@
-package br.graphpedia.graphapi.core.config;
+package br.graphpedia.graphapi.infra.config;
 
+import br.graphpedia.graphapi.infra.controller.interceptor.CreateTermInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -17,6 +18,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(createTermInterceptor)
-                .addPathPatterns(Routes.TERM_PREFIX + Routes.CREATE);
+                .addPathPatterns("/term/create");
     }
 }

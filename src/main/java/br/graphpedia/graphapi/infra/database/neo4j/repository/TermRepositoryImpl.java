@@ -2,8 +2,7 @@ package br.graphpedia.graphapi.infra.database.neo4j.repository;
 
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
 import br.graphpedia.graphapi.core.entity.Term;
-import br.graphpedia.graphapi.core.expections.business.BadRequestException;
-import br.graphpedia.graphapi.core.expections.database.PersistenceException;
+import br.graphpedia.graphapi.core.expections.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.ITermRepository;
 import br.graphpedia.graphapi.infra.database.neo4j.entity.TermEntity;
 import br.graphpedia.graphapi.infra.database.neo4j.mapper.TermNeo4jMapper;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -76,12 +74,12 @@ public class TermRepositoryImpl implements ITermRepository {
 
     private static void validateTerm(Term term) {
         if (term.getTitle() == null || term.getTitle().isEmpty()) {
-            throw new BadRequestException("Title cannot be null or empty");
+            throw new IllegalArgumentException("Title cannot be null or empty");
         }
 
         for (ConnectionWith connection : term.getConnectionWiths()) {
             if (connection.getTargetTerm().getTitle() == null || connection.getTargetTerm().getTitle().isEmpty()) {
-                throw new BadRequestException("Target term title cannot be null or empty");
+                throw new IllegalArgumentException("Target term title cannot be null or empty");
             }
         }
     }
