@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TermService implements TermUseCase {
@@ -19,8 +20,20 @@ public class TermService implements TermUseCase {
     }
 
     @Override
-    public Term create(String term) {
+    public Term getGraph(String term) {
 
+        Term graph = getGraphLevels(term);
+
+        //TODO: CRIAR METODO PARA VERIFICAR SE A ARVORE ESTA COMPLETA OU SE PRECISA DE NOVAS CONSULTAS
+
+        if(Objects.nonNull(graph))
+            return graph;
+
+        return null;
+    }
+
+    private Term getGraphLevels(String term) {
+        //TODO: FAZER FUNÇÃO DE BUSCA DO GRAFO, PENSANDO EM NOS POR NIVEL
         return null;
     }
 

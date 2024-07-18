@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TermUseCase {
 
-    Term create(String term);
+    Term getGraph(String term);
 
     Term createTest(Term term);
 

@@ -22,9 +22,9 @@ public class TermController {
         return ResponseEntity.ok().body(termUseCase.createTest(term));
     }
 
-    @PostMapping("/")
-    public ResponseEntity<Term> create(@PathVariable String term){
-        return ResponseEntity.ok().body(termUseCase.create(term));
+    @GetMapping("/{term}")
+    public ResponseEntity<Term> getGraph(@PathVariable String term){
+        return ResponseEntity.ok().body(termUseCase.getGraph(term));
     }
 
     @GetMapping("/")
