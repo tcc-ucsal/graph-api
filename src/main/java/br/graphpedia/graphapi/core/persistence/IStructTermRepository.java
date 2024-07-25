@@ -4,7 +4,7 @@ import br.graphpedia.graphapi.core.entity.Term;
 
 import java.util.List;
 
-public interface ITermRepository {
+public interface IStructTermRepository {
 
     Term create(Term term);
 

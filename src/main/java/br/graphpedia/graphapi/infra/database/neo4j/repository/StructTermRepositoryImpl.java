@@ -3,7 +3,7 @@ package br.graphpedia.graphapi.infra.database.neo4j.repository;
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.exceptions.PersistenceException;
-import br.graphpedia.graphapi.core.persistence.ITermRepository;
+import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
 import br.graphpedia.graphapi.infra.database.neo4j.entity.TermEntity;
 import br.graphpedia.graphapi.infra.database.neo4j.mapper.TermNeo4jMapper;
 import br.graphpedia.graphapi.infra.utils.Neo4jObjectConverter;
@@ -18,13 +18,13 @@ import java.time.ZoneId;
 import java.util.List;
 
 @Repository
-public class TermRepositoryImpl implements ITermRepository {
+public class StructTermRepositoryImpl implements IStructTermRepository {
 
     private final Neo4jTermRepository neo4jTermRepository;
     private final Neo4jClient neo4jClient;
 
     @Autowired
-    public TermRepositoryImpl(Neo4jTermRepository neo4jTermRepository, Neo4jClient neo4jClient) {
+    public StructTermRepositoryImpl(Neo4jTermRepository neo4jTermRepository, Neo4jClient neo4jClient) {
         this.neo4jTermRepository = neo4jTermRepository;
         this.neo4jClient = neo4jClient;
     }
