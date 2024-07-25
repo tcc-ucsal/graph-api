@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class CreateTermInterceptor implements HandlerInterceptor {
+public class NeedForContextInterceptor implements HandlerInterceptor {
 
     private TermUseCase termUseCase;
 
     @Autowired
-    public CreateTermInterceptor(TermUseCase termUseCase) {
+    public NeedForContextInterceptor(TermUseCase termUseCase) {
         this.termUseCase = termUseCase;
     }
 

@@ -10,6 +10,7 @@ import java.util.List;
 public class DataProcessingImpl implements DataProcessingUseCase {
     @Override
     public List<String> getTermContext(String term) {
+        //return List.of("Manga (Fruta)", "Manga (MG)", "Manga (Camisa)", "Manga (Fut)");
         return null;
     }
 

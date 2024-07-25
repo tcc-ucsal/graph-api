@@ -1,6 +1,6 @@
 package br.graphpedia.graphapi.infra.config;
 
-import br.graphpedia.graphapi.infra.controller.interceptor.CreateTermInterceptor;
+import br.graphpedia.graphapi.infra.controller.interceptor.NeedForContextInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -8,16 +8,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    private final CreateTermInterceptor createTermInterceptor;
+    private final NeedForContextInterceptor needForContextInterceptor;
 
     @Autowired
-    public WebConfig(CreateTermInterceptor createTermInterceptor) {
-        this.createTermInterceptor = createTermInterceptor;
+    public WebConfig(NeedForContextInterceptor needForContextInterceptor) {
+        this.needForContextInterceptor = needForContextInterceptor;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(createTermInterceptor)
+        registry.addInterceptor(needForContextInterceptor)
                 .addPathPatterns("/term/create");
     }
 }

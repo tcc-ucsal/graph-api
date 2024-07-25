@@ -61,7 +61,6 @@ public class TermService implements TermUseCase {
     public List<String> verifyNeedForContext(String termTitle) {
         //TODO: IMPL
         return dataProcessingUseCase.getTermContext(termTitle);
-        //return List.of("Manga (Fruta)", "Manga (MG)", "Manga (Camisa)", "Manga (Fut)");
     }
 
 
