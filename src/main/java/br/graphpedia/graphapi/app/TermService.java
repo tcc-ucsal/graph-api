@@ -2,6 +2,7 @@ package br.graphpedia.graphapi.app;
 
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.persistence.ITermRepository;
+import br.graphpedia.graphapi.core.usecase.DataProcessingUseCase;
 import br.graphpedia.graphapi.core.usecase.TermUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,12 @@ public class TermService implements TermUseCase {
 
     private final ITermRepository iTermRepository;
 
+    private final DataProcessingUseCase dataProcessingUseCase;
+
     @Autowired
-    public TermService(ITermRepository iTermRepository) {
+    public TermService(ITermRepository iTermRepository, DataProcessingUseCase dataProcessingUseCase) {
         this.iTermRepository = iTermRepository;
+        this.dataProcessingUseCase = dataProcessingUseCase;
     }
 
     @Override
@@ -54,9 +58,10 @@ public class TermService implements TermUseCase {
     }
 
     @Override
-    public List<String> getSynonymTerms(String termTitle) {
-        return List.of();
-        //return List.of("Manga (Fruta), Manga (MG), Manga (Camisa), Manga (Fut)");
+    public List<String> verifyNeedForContext(String termTitle) {
+        //TODO: IMPL
+        return dataProcessingUseCase.getTermContext(termTitle);
+        //return List.of("Manga (Fruta)", "Manga (MG)", "Manga (Camisa)", "Manga (Fut)");
     }
 
 

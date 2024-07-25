@@ -15,7 +15,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.StringJoiner;
 
 @Component
 public class CreateTermInterceptor implements HandlerInterceptor {
@@ -27,20 +26,20 @@ public class CreateTermInterceptor implements HandlerInterceptor {
         this.termUseCase = termUseCase;
     }
 
-    @Override
+    @Override 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        List<String> synonyms = termUseCase.getSynonymTerms(extractTermFromRequest(request));
+        List<String> context = termUseCase.verifyNeedForContext(extractTermFromRequest(request));
 
-        if (Objects.nonNull(synonyms) && !synonyms.isEmpty()) {
+        if (Objects.nonNull(context) && !context.isEmpty()) {
             ObjectMapper objectMapper = new ObjectMapper();
-            ArrayNode synonymsNode = objectMapper.createArrayNode();
-            for (String synonym : synonyms) {
-                synonymsNode.add(synonym);
+            ArrayNode contextNode = objectMapper.createArrayNode();
+            for (String synonym : context) {
+                contextNode.add(synonym);
             }
 
             ObjectNode responseObject = JsonNodeFactory.instance.objectNode();
-            responseObject.set("synonyms", synonymsNode);
+            responseObject.set("context", contextNode);
 
             response.setStatus(HttpServletResponse.SC_CONFLICT);
             response.setContentType("application/json");

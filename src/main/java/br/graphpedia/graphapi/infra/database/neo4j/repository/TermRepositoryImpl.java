@@ -2,7 +2,7 @@ package br.graphpedia.graphapi.infra.database.neo4j.repository;
 
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
 import br.graphpedia.graphapi.core.entity.Term;
-import br.graphpedia.graphapi.core.expections.PersistenceException;
+import br.graphpedia.graphapi.core.exceptions.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.ITermRepository;
 import br.graphpedia.graphapi.infra.database.neo4j.entity.TermEntity;
 import br.graphpedia.graphapi.infra.database.neo4j.mapper.TermNeo4jMapper;
