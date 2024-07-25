@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.core.expections;
+package br.graphpedia.graphapi.core.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ public class ErrorResponse {
 
     private int status;
     private String message;
-    private Throwable couse;
+    private Throwable cause;
     private LocalDateTime timestamp;
 
 }

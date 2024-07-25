@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.core.expections;
+package br.graphpedia.graphapi.core.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
