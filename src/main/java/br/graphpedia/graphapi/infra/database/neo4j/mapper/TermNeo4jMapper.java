@@ -20,7 +20,6 @@ public interface TermNeo4jMapper {
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "title", target = "title"),
-            @Mapping(source = "source", target = "source"),
             @Mapping(source = "createdDate", target = "createdDate"),
             @Mapping(source = "updatedDate", target = "updatedDate"),
             @Mapping(target = "connectionWiths", expression = "java(connectionsToCore(termEntity.getConnectionWiths()))")
@@ -31,7 +30,6 @@ public interface TermNeo4jMapper {
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "title", target = "title"),
-            @Mapping(source = "source", target = "source"),
             @Mapping(source = "createdDate", target = "createdDate"),
             @Mapping(source = "updatedDate", target = "updatedDate"),
             @Mapping(target = "connectionWiths", expression = "java(connectionsToEntity(term.getConnectionWiths()))")
