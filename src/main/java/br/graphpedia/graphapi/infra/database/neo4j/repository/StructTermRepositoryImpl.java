@@ -38,7 +38,6 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
             String cypher = "MERGE (termC:Term {title: $term.title}) " +
                     "ON CREATE SET " +
                     "              termC.title = $term.title, " +
-                    "              termC.source = $term.source, " +
                     "              termC.createdDate = timestamp() " +
                     "ON MATCH SET " +
                     "              termC.source = $term.source, " +
@@ -49,7 +48,7 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
                     "MERGE (termC)-[c:CONNECTION_WITH {relevance_level: connection.relevanceLevel}]->(term) " +
                     "   ON CREATE SET c.relevance_level = connection.relevanceLevel " +
                     "   ON MATCH SET c.relevance_level = (CASE WHEN c.relevance_level >= connection.relevanceLevel THEN connection.relevanceLevel ELSE c.relevance_level END ) " +
-                    "RETURN termC.id as id, termC.title as title, termC.description as description, termC.source as source, " +
+                    "RETURN termC.id as id, termC.title as title, " +
                     "termC.createdDate as createdDate, termC.updatedDate as updatedDate";
 
             cratedEntity = neo4jClient.query(cypher)
@@ -57,7 +56,6 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
                     .fetchAs(TermEntity.class)
                     .mappedBy((typeSystem, register) ->
                             new TermEntity(register.get("id").asString(), register.get("title").asString(),
-                                    register.get("source").asString(),
                                     getLocalDateTimeByRecord(register, "createdDate"),
                                     getLocalDateTimeByRecord(register,"updatedDate")))
                     .all().stream().toList();

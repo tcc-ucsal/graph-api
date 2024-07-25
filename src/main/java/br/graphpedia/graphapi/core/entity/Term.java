@@ -19,6 +19,5 @@ public class Term {
     private String title;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
-    private boolean completed;
     private Set<ConnectionWith> connectionWiths = new HashSet<>();
 }
