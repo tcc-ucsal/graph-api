@@ -1,11 +1,15 @@
 package br.graphpedia.graphapi.core.entity;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ConnectionWith {
 
     private String id;
@@ -13,14 +17,5 @@ public class ConnectionWith {
     private Integer relevanceLevel;
 
     private Term targetTerm;
-
-    public ConnectionWith(String id, Integer relevanceLevel, Term targetTerm) {
-        this.id = id;
-        this.relevanceLevel = relevanceLevel;
-        this.targetTerm = targetTerm;
-    }
-
-    public ConnectionWith() {
-    }
 
 }

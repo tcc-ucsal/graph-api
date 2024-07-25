@@ -1,7 +1,7 @@
 package br.graphpedia.graphapi.app;
 
 import br.graphpedia.graphapi.core.entity.Term;
-import br.graphpedia.graphapi.core.persistence.ITermRepository;
+import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
 import br.graphpedia.graphapi.core.usecase.DataProcessingUseCase;
 import br.graphpedia.graphapi.core.usecase.TermUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +13,13 @@ import java.util.Objects;
 @Service
 public class TermService implements TermUseCase {
 
-    private final ITermRepository iTermRepository;
+    private final IStructTermRepository iStructTermRepository;
 
     private final DataProcessingUseCase dataProcessingUseCase;
 
     @Autowired
-    public TermService(ITermRepository iTermRepository, DataProcessingUseCase dataProcessingUseCase) {
-        this.iTermRepository = iTermRepository;
+    public TermService(IStructTermRepository iStructTermRepository, DataProcessingUseCase dataProcessingUseCase) {
+        this.iStructTermRepository = iStructTermRepository;
         this.dataProcessingUseCase = dataProcessingUseCase;
     }
 
@@ -43,18 +43,18 @@ public class TermService implements TermUseCase {
 
     @Override
     public Term createTest(Term term) {
-        Term createdTerm = iTermRepository.create(term);
+        Term createdTerm = iStructTermRepository.create(term);
         return createdTerm;
     }
 
     @Override
     public List<Term> findAll() {
-        return iTermRepository.findAll();
+        return iStructTermRepository.findAll();
     }
 
     @Override
     public void deleteAll() {
-        iTermRepository.deleteAll();
+        iStructTermRepository.deleteAll();
     }
 
     @Override

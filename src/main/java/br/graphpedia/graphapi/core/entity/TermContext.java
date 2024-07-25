@@ -6,20 +6,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.List;
 
-@Setter
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-public class Term {
+@AllArgsConstructor
+public class TermContext {
     private String id;
     private String title;
-    private String source;
+    private String context;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
-    private boolean completed;
-    private Set<ConnectionWith> connectionWiths = new HashSet<>();
+    private List<String> synonyms;
 }
