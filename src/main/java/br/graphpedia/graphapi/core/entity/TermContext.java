@@ -16,6 +16,7 @@ public class TermContext {
     private String id;
     private String title;
     private String context;
+    private String source;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private List<String> synonyms;

@@ -17,7 +17,6 @@ import java.util.UUID;
 public class Term {
     private String id;
     private String title;
-    private String source;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private boolean completed;
