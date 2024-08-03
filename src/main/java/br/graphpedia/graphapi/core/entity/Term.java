@@ -20,4 +20,5 @@ public class Term {
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private Set<ConnectionWith> connectionWiths = new HashSet<>();
+    private TermContext context;
 }

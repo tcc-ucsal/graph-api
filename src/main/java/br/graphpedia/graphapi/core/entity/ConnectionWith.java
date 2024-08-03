@@ -11,11 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConnectionWith {
-
     private String id;
-
     private Integer relevanceLevel;
-
     private Term targetTerm;
-
 }

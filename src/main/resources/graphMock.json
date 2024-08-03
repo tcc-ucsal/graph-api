@@ -1,0 +1,69 @@
+{
+  "terms": [
+    {
+      "id": "1",
+      "title": "Artificial Intelligence",
+      "connectionWiths": [
+        {
+          "id": "1",
+          "relevanceLevel": 3,
+          "targetTerm": "machine learning"
+        },
+        {
+          "id": "2",
+          "relevanceLevel": 2,
+          "targetTerm": "deep learning"
+        },
+        {
+          "id": "3",
+          "relevanceLevel": 1,
+          "targetTerm": "test 1"
+        },
+        {
+          "id": "4",
+          "relevanceLevel": 1,
+          "targetTerm": "test 2"
+        },
+        {
+          "id": "5",
+          "relevanceLevel": 1,
+          "targetTerm": "test 3"
+        },
+        {
+          "id": "6",
+          "relevanceLevel": 2,
+          "targetTerm": "test 8"
+        },
+        {
+          "id": "7",
+          "relevanceLevel": 2,
+          "targetTerm": "test abc"
+        },
+        {
+          "id": "8",
+          "relevanceLevel": 2,
+          "targetTerm": "test 32"
+        },
+        {
+          "id": "9",
+          "relevanceLevel": 3,
+          "targetTerm": "32 dsf"
+        },
+        {
+          "id": "10",
+          "relevanceLevel": 4,
+          "targetTerm": "lskjd dsf"
+        }
+      ],
+      "context": {
+        "id": "1",
+        "title": "AI Context",
+        "context": "Artificial Intelligence is the simulation of human intelligence in machines that are programmed to think like humans and mimic their actions.",
+        "source": "Wikipedia",
+        "synonyms": ["AI", "artificial neural networks"]
+      }
+    },
+    {
+    }
+  ]
+}
