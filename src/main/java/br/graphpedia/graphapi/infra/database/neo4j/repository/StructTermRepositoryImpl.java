@@ -7,10 +7,11 @@ import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
 import br.graphpedia.graphapi.infra.database.neo4j.entity.TermEntity;
 import br.graphpedia.graphapi.infra.database.neo4j.mapper.TermNeo4jMapper;
 import br.graphpedia.graphapi.infra.utils.Neo4jObjectConverter;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -30,7 +31,6 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
     }
 
     @Override
-    @Transactional
     public Term create(Term term) {
         validateTerm(term);
         List<TermEntity> cratedEntity;

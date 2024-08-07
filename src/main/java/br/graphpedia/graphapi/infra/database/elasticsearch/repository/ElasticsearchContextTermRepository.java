@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface ElasticsearchContextTermRepository extends ElasticsearchRepository<TermContextEntity, String> {
 
-    Optional<TermContextEntity> findOneByTitleOrSynonyms(String searchTerm);
+    Optional<TermContextEntity> findByTitleIgnoreCaseOrSynonymsContainsIgnoreCase(String title, String synonym);
+
+    Optional<TermContextEntity> findByTitle(String title);
 
 }

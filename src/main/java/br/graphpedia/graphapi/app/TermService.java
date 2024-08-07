@@ -6,6 +6,7 @@ import br.graphpedia.graphapi.core.persistence.IContextTermRepository;
 import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
 import br.graphpedia.graphapi.core.usecase.DataProcessingUseCase;
 import br.graphpedia.graphapi.core.usecase.TermUseCase;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class TermService implements TermUseCase {
     }
 
     @Override
+    @Transactional
     public Term getGraph(String term) {
 
         Term graph = new Term();
