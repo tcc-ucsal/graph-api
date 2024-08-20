@@ -26,7 +26,7 @@ public class TermContextEntity {
     private String title;
 
     @Field(type = FieldType.Text)
-    private String context;
+    private String article;
 
     @Field(type = FieldType.Text)
     private String source;

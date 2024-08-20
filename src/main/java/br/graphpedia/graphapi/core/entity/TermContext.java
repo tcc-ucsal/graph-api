@@ -15,7 +15,7 @@ import java.util.List;
 public class TermContext {
     private String id;
     private String title;
-    private String context;
+    private String article;
     private String source;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;

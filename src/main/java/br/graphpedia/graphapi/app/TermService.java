@@ -2,11 +2,12 @@ package br.graphpedia.graphapi.app;
 
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;
+import br.graphpedia.graphapi.core.exceptions.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.IContextTermRepository;
 import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
 import br.graphpedia.graphapi.core.usecase.DataProcessingUseCase;
 import br.graphpedia.graphapi.core.usecase.TermUseCase;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,9 +44,18 @@ public class TermService implements TermUseCase {
         }
 
         graph = dataProcessingUseCase.getCompleteTerm(term);
-        TermContext createdContext = contextTermRepository.save(graph.getContext());
-        graph = structTermRepository.create(graph);
-        graph.setContext(createdContext);
+
+        try{
+            TermContext createdContext = contextTermRepository.save(graph.getContext());
+            graph.setContext(createdContext);
+            graph = structTermRepository.create(graph);
+
+        }catch (Exception exception){
+            contextTermRepository.deleteByTitle(graph.getTitle());
+            structTermRepository.deleteByTitleIfNotIncomingConnections(graph.getTitle());
+            throw new PersistenceException("Error on save graph", exception.getCause());
+        }
+
         return graph;
     }
 

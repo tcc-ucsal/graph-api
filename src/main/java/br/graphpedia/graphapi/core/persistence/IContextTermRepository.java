@@ -11,4 +11,5 @@ public interface IContextTermRepository {
 
     Optional<TermContext> findByTitleOrSynonyms(String term);
 
+    void deleteByTitle(String title);
 }

@@ -35,4 +35,9 @@ public class ContextTermRepositoryImpl implements IContextTermRepository {
             throw new PersistenceException(e.getMessage(), e.getCause());
         }
     }
+
+    @Override
+    public void deleteByTitle(String title) {
+        elasticsearchContextTermRepository.deleteByTitleIgnoreCase(title);
+    }
 }

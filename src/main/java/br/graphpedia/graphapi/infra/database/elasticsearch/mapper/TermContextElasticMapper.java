@@ -15,7 +15,7 @@ public interface TermContextElasticMapper {
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "title", target = "title"),
-            @Mapping(source = "context", target = "context"),
+            @Mapping(source = "article", target = "article"),
             @Mapping(source = "source", target = "source"),
             @Mapping(source = "createdDate", target = "createdDate"),
             @Mapping(source = "updatedDate", target = "updatedDate"),
@@ -26,7 +26,7 @@ public interface TermContextElasticMapper {
     @Mappings({
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "title", target = "title"),
-            @Mapping(source = "context", target = "context"),
+            @Mapping(source = "article", target = "article"),
             @Mapping(source = "source", target = "source"),
             @Mapping(source = "createdDate", target = "createdDate"),
             @Mapping(source = "updatedDate", target = "updatedDate"),

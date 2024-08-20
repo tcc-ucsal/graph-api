@@ -12,4 +12,5 @@ public interface IStructTermRepository {
 
     void deleteAll();
 
+    void deleteByTitleIfNotIncomingConnections(String title);
 }

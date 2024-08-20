@@ -10,8 +10,6 @@ import br.graphpedia.graphapi.infra.utils.Neo4jObjectConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -96,6 +94,15 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
 
     public void deleteAll(){
         neo4jTermRepository.deleteAll();
+    }
+
+    @Override
+    public void deleteByTitleIfNotIncomingConnections(String title) {
+//        Long incomingConnections = neo4jTermRepository.countIncomingConnections(title);
+//
+//        if(incomingConnections == 0L){
+//            neo4jTermRepository.deleteByTitleIgnoreCase(title);
+//        }
     }
 
 }
