@@ -8,9 +8,5 @@ import org.springframework.lang.NonNull;
 import java.util.Optional;
 
 public interface ElasticsearchContextTermRepository extends ElasticsearchRepository<TermContextEntity, String> {
-    Optional<TermContextEntity> findByTitleIgnoreCaseOrSynonymsContainsIgnoreCase(String title, String synonym);
-
-    Optional<TermContextEntity> findByTitle(String title);
-
     long deleteByTitleIgnoreCase(@NonNull String title);
 }

@@ -37,6 +37,6 @@ public class TermContextEntity {
     @Field(type = FieldType.Date)
     private LocalDateTime updatedDate;
 
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Keyword, analyzer = "standard", searchAnalyzer = "standard")
     private List<String> synonyms;
 }

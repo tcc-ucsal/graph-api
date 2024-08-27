@@ -7,6 +7,10 @@ import br.graphpedia.graphapi.infra.database.elasticsearch.entity.TermContextEnt
 import br.graphpedia.graphapi.infra.database.elasticsearch.mapper.TermContextElasticMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -14,10 +18,12 @@ import java.util.Optional;
 @Repository
 public class ContextTermRepositoryImpl implements IContextTermRepository {
     private final ElasticsearchContextTermRepository elasticsearchContextTermRepository;
+    private final ElasticsearchOperations elasticsearchOperations;
 
     @Autowired
-    public ContextTermRepositoryImpl(ElasticsearchContextTermRepository elasticsearchContextTermRepository, ElasticsearchOperations elasticsearchOperations) {
+    public ContextTermRepositoryImpl(ElasticsearchContextTermRepository elasticsearchContextTermRepository, ElasticsearchOperations elasticsearchOperations, ElasticsearchOperations elasticsearchOperations1) {
         this.elasticsearchContextTermRepository = elasticsearchContextTermRepository;
+        this.elasticsearchOperations = elasticsearchOperations1;
     }
 
     @Override
@@ -29,7 +35,16 @@ public class ContextTermRepositoryImpl implements IContextTermRepository {
     @Override
     public Optional<TermContext> findByTitleOrSynonyms(String term) {
         try{
-            Optional<TermContextEntity> context = elasticsearchContextTermRepository.findByTitleIgnoreCaseOrSynonymsContainsIgnoreCase(term, term);
+            Criteria criteria = new Criteria("title").is(term)
+                    .or(new Criteria("synonyms").is(term));
+
+            CriteriaQuery query = new CriteriaQuery(criteria);
+            SearchHits<TermContextEntity> searchHits = elasticsearchOperations.search(query, TermContextEntity.class);
+
+            Optional<TermContextEntity> context = searchHits.getSearchHits().stream()
+                    .findFirst()
+                    .map(SearchHit::getContent);
+
             return context.map(TermContextElasticMapper.INSTANCE::toTermContextCore);
 
         }catch (Exception e){

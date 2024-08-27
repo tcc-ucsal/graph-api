@@ -36,7 +36,6 @@ public class TermService implements TermUseCase {
 
         Term graph = new Term();
 
-        //todo: resolver problema de query de verificação
         Optional<TermContext> termContext = contextTermRepository.findByTitleOrSynonyms(term);
 
         if(termContext.isPresent()){
