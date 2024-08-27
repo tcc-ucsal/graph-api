@@ -105,8 +105,8 @@
   ],
   "context": {
     "id": "1",
-    "title": "AI Context",
-    "context": "Artificial Intelligence is the simulation of human intelligence in machines that are programmed to think like humans and mimic their actions.",
+    "title": "AI article",
+    "article": "Artificial Intelligence is the simulation of human intelligence in machines that are programmed to think like humans and mimic their actions.",
     "source": "Wikipedia",
     "synonyms": ["AI", "artificial neural networks"]
   }

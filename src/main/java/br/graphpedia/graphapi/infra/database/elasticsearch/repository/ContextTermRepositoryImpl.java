@@ -22,7 +22,8 @@ public class ContextTermRepositoryImpl implements IContextTermRepository {
 
     @Override
     public TermContext save(TermContext context) {
-        return null;
+        TermContextEntity entity = TermContextElasticMapper.INSTANCE.toEntity(context);
+        return TermContextElasticMapper.INSTANCE.toTermContextCore(elasticsearchContextTermRepository.save(entity));
     }
 
     @Override
