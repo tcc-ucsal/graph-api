@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+//TODO: SEPARAR SERVICE
 @Service
 public class TermService implements TermUseCase {
 
@@ -47,6 +48,7 @@ public class TermService implements TermUseCase {
         graph = dataProcessingUseCase.getCompleteTerm(term);
 
         try{
+            //todo: separar service
             TermContext createdContext = contextTermRepository.save(graph.getContext());
             graph.setContext(createdContext);
             graph = structTermRepository.create(graph);
@@ -87,6 +89,11 @@ public class TermService implements TermUseCase {
     public List<String> verifyNeedForContext(String termTitle) {
         //TODO: IMPL
         return dataProcessingUseCase.getTermContext(termTitle);
+    }
+
+    @Override
+    public Optional<TermContext> getContextByTitle(String term) {
+        return contextTermRepository.findByTitleOrSynonyms(term);
     }
 
 

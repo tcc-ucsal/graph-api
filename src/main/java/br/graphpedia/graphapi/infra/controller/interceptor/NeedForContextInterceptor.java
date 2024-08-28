@@ -29,17 +29,17 @@ public class NeedForContextInterceptor implements HandlerInterceptor {
     @Override 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        List<String> context = termUseCase.verifyNeedForContext(extractTermFromRequest(request));
+        List<String> contexts = termUseCase.verifyNeedForContext(extractTermFromRequest(request));
 
-        if (Objects.nonNull(context) && !context.isEmpty()) {
+        if (Objects.nonNull(contexts) && !contexts.isEmpty()) {
             ObjectMapper objectMapper = new ObjectMapper();
             ArrayNode contextNode = objectMapper.createArrayNode();
-            for (String synonym : context) {
-                contextNode.add(synonym);
+            for (String context : contexts) {
+                contextNode.add(context);
             }
 
             ObjectNode responseObject = JsonNodeFactory.instance.objectNode();
-            responseObject.set("context", contextNode);
+            responseObject.set("contexts", contextNode);
 
             response.setStatus(HttpServletResponse.SC_CONFLICT);
             response.setContentType("application/json");
