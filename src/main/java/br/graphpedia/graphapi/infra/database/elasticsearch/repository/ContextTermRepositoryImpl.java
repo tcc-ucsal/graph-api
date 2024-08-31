@@ -13,6 +13,7 @@ import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
@@ -21,14 +22,15 @@ public class ContextTermRepositoryImpl implements IContextTermRepository {
     private final ElasticsearchOperations elasticsearchOperations;
 
     @Autowired
-    public ContextTermRepositoryImpl(ElasticsearchContextTermRepository elasticsearchContextTermRepository, ElasticsearchOperations elasticsearchOperations, ElasticsearchOperations elasticsearchOperations1) {
+    public ContextTermRepositoryImpl(ElasticsearchContextTermRepository elasticsearchContextTermRepository, ElasticsearchOperations elasticsearchOperation) {
         this.elasticsearchContextTermRepository = elasticsearchContextTermRepository;
-        this.elasticsearchOperations = elasticsearchOperations1;
+        this.elasticsearchOperations = elasticsearchOperation;
     }
 
     @Override
     public TermContext save(TermContext context) {
         TermContextEntity entity = TermContextElasticMapper.INSTANCE.toEntity(context);
+        entity.setCreatedDate(LocalDateTime.now());
         return TermContextElasticMapper.INSTANCE.toTermContextCore(elasticsearchContextTermRepository.save(entity));
     }
 

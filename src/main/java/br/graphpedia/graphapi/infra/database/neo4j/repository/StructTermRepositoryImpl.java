@@ -1,9 +1,11 @@
 package br.graphpedia.graphapi.infra.database.neo4j.repository;
 
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
+import br.graphpedia.graphapi.core.entity.ConnectionWithDetails;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.exceptions.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
+import br.graphpedia.graphapi.infra.database.neo4j.entity.ConnectionWithEntity;
 import br.graphpedia.graphapi.infra.database.neo4j.entity.TermEntity;
 import br.graphpedia.graphapi.infra.database.neo4j.mapper.TermNeo4jMapper;
 import br.graphpedia.graphapi.infra.utils.Neo4jObjectConverter;
@@ -15,6 +17,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class StructTermRepositoryImpl implements IStructTermRepository {
@@ -65,6 +68,36 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
 
             throw new PersistenceException(exception.getMessage(), exception.getCause());
         }
+
+    }
+
+    @Override
+    public List<ConnectionWithDetails> getConnectionsWithDetails(String title) {
+        String query = """
+            MATCH (t:Term)-[r:CONNECTION_WITH]->(target:Term)
+            WHERE t.title = $termTitle
+            OPTIONAL MATCH (target)-[:CONNECTION_WITH]->(other)
+            WITH target, r, COUNT(other) as connectionCount
+            RETURN target, r, connectionCount
+            """;
+
+        return neo4jClient.query(query)
+                .bind(title).to("termTitle")
+                .fetchAs(ConnectionWithDetails.class)
+                .mappedBy((typeSystem, record) -> {
+                    Term targetTerm = new Term();
+                    targetTerm.setId(record.get("target").get("id").asString());
+                    targetTerm.setTitle(record.get("target").get("title").asString());
+
+                    ConnectionWith connectionWithEntity = new ConnectionWith();
+                    connectionWithEntity.setId(record.get("r").get("id").asString());
+                    connectionWithEntity.setRelevanceLevel(record.get("r").get("relevance_level").asInt());
+                    connectionWithEntity.setTargetTerm(targetTerm);
+
+                    int connectionCount = record.get("connectionCount").asInt();
+                    return new ConnectionWithDetails(connectionWithEntity, connectionCount);
+                })
+                .all().stream().toList();
 
     }
 
