@@ -23,11 +23,6 @@ public class TermController {
         this.termUseCase = termUseCase;
     }
 
-    @PostMapping("/test/create")
-    public ResponseEntity<Term> createTest(@RequestBody Term term){
-        return ResponseEntity.ok().body(termUseCase.createTest(term));
-    }
-
     @GetMapping("/{term}")
     public ResponseEntity<Term> getGraph(@PathVariable String term){
         return ResponseEntity.ok().body(termUseCase.getGraph(term));

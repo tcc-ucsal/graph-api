@@ -7,10 +7,6 @@ import java.util.List;
 public interface IStructTermRepository {
 
     Term create(Term term);
-
-    List<Term> findAll();
-
     void deleteAll();
-
     void deleteByTitleIfNotIncomingConnections(String title);
 }

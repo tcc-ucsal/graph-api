@@ -10,13 +10,11 @@ public interface TermUseCase {
 
     Term getGraph(String term);
 
-    Term createTest(Term term);
-
-    List<Term> findAll();
-
     void deleteAll();
 
     List<String> verifyNeedForContext(String termTitle);
 
     Optional<TermContext> getContextByTitle(String term);
+    Term termPrincipal(String term);
+
 }

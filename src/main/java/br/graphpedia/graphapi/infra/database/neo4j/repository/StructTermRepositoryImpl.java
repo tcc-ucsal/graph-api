@@ -86,23 +86,17 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
                 LocalDateTime.ofInstant(Instant.ofEpochSecond(register.get(fieldName).asLong()), ZoneId.of("America/Sao_Paulo"));
     }
 
-    @Override
-    public List<Term> findAll() {
-        List<TermEntity> list = neo4jTermRepository.findAll();
-        return TermNeo4jMapper.INSTANCE.toTermCore(list);
-    }
-
     public void deleteAll(){
         neo4jTermRepository.deleteAll();
     }
 
     @Override
     public void deleteByTitleIfNotIncomingConnections(String title) {
-//        Long incomingConnections = neo4jTermRepository.countIncomingConnections(title);
-//
-//        if(incomingConnections == 0L){
-//            neo4jTermRepository.deleteByTitleIgnoreCase(title);
-//        }
+        Long incomingConnections = neo4jTermRepository.countIncomingConnections(title);
+
+        if(incomingConnections == 0L){
+            neo4jTermRepository.deleteByTitleIgnoreCase(title);
+        }
     }
 
 }
