@@ -15,6 +15,5 @@ public interface TermUseCase {
     List<String> verifyNeedForContext(String termTitle);
 
     Optional<TermContext> getContextByTitle(String term);
-    Term termPrincipal(String term);
 
 }

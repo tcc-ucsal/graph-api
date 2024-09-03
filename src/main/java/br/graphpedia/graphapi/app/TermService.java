@@ -1,6 +1,7 @@
 package br.graphpedia.graphapi.app;
 
-import br.graphpedia.graphapi.core.entity.ConnectionWithDetails;
+import br.graphpedia.graphapi.core.entity.ConnectionWith;
+import br.graphpedia.graphapi.app.dto.ConnectionWithCountDTO;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;
 import br.graphpedia.graphapi.core.exceptions.PersistenceException;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 @Service
 public class TermService implements TermUseCase {
@@ -36,16 +36,11 @@ public class TermService implements TermUseCase {
     @Transactional
     public Term getGraph(String term) {
 
+        Optional<Term> optTerm = getExistingGraph(term);
+        if (optTerm.isPresent()) return optTerm.get();
+
         Term graph = new Term();
-
-        Optional<TermContext> termContext = contextTermRepository.findByTitleOrSynonyms(term);
-
-        if(termContext.isPresent()){
-            graph = getMaxTermsOnScreen(term);
-            graph.setContext(termContext.get());
-            return graph;
-        }
-
+        graph.setTitle(term);
         graph = dataProcessingUseCase.getCompleteTerm(term);
 
         try{
@@ -62,71 +57,36 @@ public class TermService implements TermUseCase {
         return graph;
     }
 
-    private Term getMaxTermsOnScreen(String term) {
+    private Set<ConnectionWith> getMaxTermsOnScreen(String term) {
 
-        List<ConnectionWithDetails> connections = structTermRepository.getConnectionsWithDetails(term);
+        List<ConnectionWithCountDTO> connections = structTermRepository.getConnectionsWithLevelOneCount(term);
 
         if(connections.size() < MAX_SCREEN_NODES){
-            connections.sort(Comparator.comparingInt(
-                    connectionWithDetails -> connectionWithDetails.getConnection().getRelevanceLevel()
-            ));
+           String[] complementTerms = (String[]) connections.stream()
+                   .filter(c -> c.getConnectionsCount() > 0)
+                   .map(c -> c.getConnection().getTargetTerm().getTitle())
+                   .toArray();
 
-            HashMap<String, Integer> idsCount = getTermsToComplete(connections);
-            //TODO: FINALIZAR E TESTAR
-            //TODO: FAZER METODO REPOSITORY PARA OBTER NUMERO CERTO DE NOS
-            //TODO: MESCLAR RESULTADOS
+            int limit = (MAX_SCREEN_NODES - connections.size()) > complementTerms.length ?
+                    Math.round((float) complementTerms.length / (MAX_SCREEN_NODES - connections.size())) :
+                    2;
+
+            List<ConnectionWith> complements = structTermRepository.getConnectionByLevel(complementTerms, 1, limit);
+
+            for(ConnectionWith comp : complements){
+                Optional<ConnectionWithCountDTO> connection = connections.stream()
+                        .filter(c -> c.getConnection().getTargetTerm().getTitle().equals(comp.getMainTitle())).findFirst();
+
+                if(connection.isPresent()){
+                    int indexOfMain = connections.indexOf(connection.get());
+                    connection.get().getConnection().getTargetTerm().getConnectionWiths().add(comp);
+                    connections.set(indexOfMain, connection.get());
+                }
+            }
+
         }
 
-        Term graph = new Term();
-        graph.setTitle(term);
-        return graph;
-    }
-
-    private HashMap<String, Integer> getTermsToComplete(List<ConnectionWithDetails> connections) {
-        HashMap<String,Integer> result = new HashMap<>();
-
-        int currentSum = connections.stream().mapToInt(ConnectionWithDetails::getConnectionsCount).sum() + connections.size();
-        int enableValue = MAX_SCREEN_NODES - currentSum;
-        int relevanceLevel = 1;
-
-        if(currentSum <= enableValue){
-            connections.forEach(c -> result.put(c.getConnection().getId(), c.getConnectionsCount()));
-        }else{
-            result.putAll(getProportionalTermCount(connections, enableValue, currentSum, relevanceLevel));
-        }
-
-        return result;
-    }
-
-    private Map<String, Integer> getProportionalTermCount(List<ConnectionWithDetails> connections, int enableValue, int currentSum, int relevanceLevel) {
-        Map<String, Integer> result = new HashMap<>();
-
-        Stream<ConnectionWithDetails> currentLevelList = connections.stream()
-                .filter(c -> c.getConnection().getRelevanceLevel() == relevanceLevel);
-
-        int countCurrentLevel = currentLevelList
-                .mapToInt(cc -> cc.getConnection().getRelevanceLevel()).sum();
-
-        if(countCurrentLevel < enableValue){
-            currentLevelList.forEach(c -> result.put(c.getConnection().getId(), c.getConnectionsCount()));
-
-            int newEnableValue = enableValue - countCurrentLevel;
-            int newCurrentSum = currentSum + countCurrentLevel;
-            int nextRelevanceLevel = relevanceLevel+1;
-
-            result.putAll(getProportionalTermCount(connections, newEnableValue, newCurrentSum, nextRelevanceLevel));
-        }else{
-            currentLevelList.forEach(c -> {
-                int balanceCount = getBalance(enableValue, currentSum, c.getConnectionsCount());
-                result.put(c.getConnection().getId(), balanceCount);
-            });
-        }
-
-        return result;
-    }
-
-    private static int getBalance(int enableValue, int currentSum, Integer value) {
-        return (int) Math.round((double) value * enableValue / currentSum);
+        return Set.copyOf(connections.stream().map(ConnectionWithCountDTO::getConnection).toList());
     }
 
     @Override
@@ -145,9 +105,17 @@ public class TermService implements TermUseCase {
         return contextTermRepository.findByTitleOrSynonyms(term);
     }
 
-    @Override
-    public Term termPrincipal(String term) {
-        return null;
+    private Optional<Term> getExistingGraph(String term) {
+        Optional<TermContext> termContext = contextTermRepository.findByTitleOrSynonyms(term);
+
+        if(termContext.isPresent()){
+            Term graph = new Term();
+            graph.setTitle(term);
+            graph.setConnectionWiths(getMaxTermsOnScreen(term));
+            graph.setContext(termContext.get());
+            return Optional.of(graph);
+        }
+        return Optional.empty();
     }
 
 
