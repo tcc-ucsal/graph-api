@@ -5,10 +5,5 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ConnectionWithCountDTO {
-    private ConnectionWith connection;
-    private Integer connectionsCount;
+public record ConnectionWithCountDTO(ConnectionWithDTO connection, Integer connectionsCount) {
 }
