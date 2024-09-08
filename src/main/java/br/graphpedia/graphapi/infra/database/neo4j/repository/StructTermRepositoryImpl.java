@@ -1,5 +1,6 @@
 package br.graphpedia.graphapi.infra.database.neo4j.repository;
 
+import br.graphpedia.graphapi.app.dto.ConnectionWithDTO;
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
 import br.graphpedia.graphapi.app.dto.ConnectionWithCountDTO;
 import br.graphpedia.graphapi.core.entity.Term;
@@ -8,6 +9,7 @@ import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
 import br.graphpedia.graphapi.infra.database.neo4j.entity.TermEntity;
 import br.graphpedia.graphapi.infra.database.neo4j.mapper.TermNeo4jMapper;
 import br.graphpedia.graphapi.infra.utils.Neo4jObjectConverter;
+import org.neo4j.driver.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.stereotype.Repository;
@@ -16,6 +18,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class StructTermRepositoryImpl implements IStructTermRepository {
@@ -87,13 +90,17 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
                     targetTerm.setId(register.get("target").get("id").asString());
                     targetTerm.setTitle(register.get("target").get("title").asString());
 
-                    ConnectionWith connectionWithEntity = new ConnectionWith();
-                    connectionWithEntity.setId(register.get("r").get("id").asString());
-                    connectionWithEntity.setRelevanceLevel(register.get("r").get("relevance_level").asInt());
-                    connectionWithEntity.setTargetTerm(targetTerm);
+                    Value rValue = register.get("r");
+                    ConnectionWithDTO connectionWithDTO = new ConnectionWithDTO(
+                            rValue.get("id").asString(),
+                            title,
+                            rValue.get("relevance_level").asInt(),
+                            targetTerm
+                    );
 
                     int connectionCount = register.get("connectionCount").asInt();
-                    return new ConnectionWithCountDTO(connectionWithEntity, connectionCount);
+
+                    return new ConnectionWithCountDTO(connectionWithDTO, connectionCount);
                 })
                 .all().stream().toList();
 
@@ -133,16 +140,17 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
     @Override
     public List<ConnectionWith> getConnectionByLevel(String[] titles, int level, int limit) {
 
-        //TODO: ADD LIMIT add loop de titulos
         String query = """
-            MATCH (t:Term)-[r:CONNECTION_WITH {relevance_level: $level}]->(target:Term)
-            WHERE t.title = $termTitle
+            UNWIND $termTitles AS termTitle
+            MATCH (t:Term {title: termTitle})-[r:CONNECTION_WITH {relevance_level: $level}]->(target:Term)
             RETURN target, r, t.title as mainTitle
+            LIMIT $limit
             """;
 
         return neo4jClient.query(query)
                 .bind(Neo4jObjectConverter.convertToMap(level)).to("$level")
-                .bind(Neo4jObjectConverter.convertToMap(titles)).to("$termTitle")
+                .bind(Neo4jObjectConverter.convertToMap(titles)).to("$termTitles")
+                .bind(Neo4jObjectConverter.convertToMap(limit)).to("$limit")
                 .fetchAs(ConnectionWith.class)
                 .mappedBy((typeSystem, register) -> {
 

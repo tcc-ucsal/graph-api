@@ -1,25 +1,56 @@
 package br.graphpedia.graphapi.infra.dataprocessing;
 
+import br.graphpedia.graphapi.app.dto.CompleteTermSearchDTO;
+import br.graphpedia.graphapi.app.interfaces.DataProcessingExternalService;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.exceptions.PersistenceException;
-import br.graphpedia.graphapi.core.usecase.DataProcessingUseCase;
+import br.graphpedia.graphapi.infra.dataprocessing.dto.ApiResponse;
+import br.graphpedia.graphapi.infra.dataprocessing.mapper.DataProcessingApiResponseMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
 import java.util.List;
-//TODO: IMPL
+
 @Component
-public class DataProcessingImpl implements DataProcessingUseCase {
-    @Override
+public class DataProcessingImpl implements DataProcessingExternalService {
+
+    @Value("${data-processing.base-url}")
+    private String DATA_PROCESSING_URL;
+    private final RestTemplate restTemplate;
+
+    @Autowired
+    public DataProcessingImpl(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    private String getUrl(String endpoint){
+        return UriComponentsBuilder.fromHttpUrl(DATA_PROCESSING_URL)
+                .path(endpoint)
+                .toUriString();
+    }
+
     public List<String> getTermContext(String term) {
         //return List.of("Manga (Fruta)", "Manga (MG)", "Manga (Camisa)", "Manga (Fut)");
         return null;
     }
 
     @Override
-    public Term getCompleteTerm(String term) {
+    public CompleteTermSearchDTO getCompleteTerm(String term){
+
+        ApiResponse data = restTemplate.getForObject(getUrl("/highlight/" + term), ApiResponse.class);
+
+        //todo:ajustar esse mapeamento
+        return DataProcessingApiResponseMapper.INSTANCE.toCompleteTermSearchDTO(data);
+    }
+
+
+    public Term getCompleteTermTest(String term) {
         try{
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());

@@ -1,5 +1,6 @@
 package br.graphpedia.graphapi.app;
 
+import br.graphpedia.graphapi.app.mapper.ConnectionWithMapper;
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
 import br.graphpedia.graphapi.app.dto.ConnectionWithCountDTO;
 import br.graphpedia.graphapi.core.entity.Term;
@@ -39,9 +40,12 @@ public class TermService implements TermUseCase {
         Optional<Term> optTerm = getExistingGraph(term);
         if (optTerm.isPresent()) return optTerm.get();
 
-        Term graph = new Term();
-        graph.setTitle(term);
+        Term graph;
         graph = dataProcessingUseCase.getCompleteTerm(term);
+
+        if(!term.equals(graph.getTitle())){
+            graph.getContext().getSynonyms().add(term);
+        }
 
         try{
             TermContext createdContext = contextTermRepository.save(graph.getContext());
@@ -63,8 +67,8 @@ public class TermService implements TermUseCase {
 
         if(connections.size() < MAX_SCREEN_NODES){
            String[] complementTerms = (String[]) connections.stream()
-                   .filter(c -> c.getConnectionsCount() > 0)
-                   .map(c -> c.getConnection().getTargetTerm().getTitle())
+                   .filter(c -> c.connectionsCount() > 0)
+                   .map(c -> c.connection().targetTerm().getTitle())
                    .toArray();
 
             int limit = (MAX_SCREEN_NODES - connections.size()) > complementTerms.length ?
@@ -75,18 +79,18 @@ public class TermService implements TermUseCase {
 
             for(ConnectionWith comp : complements){
                 Optional<ConnectionWithCountDTO> connection = connections.stream()
-                        .filter(c -> c.getConnection().getTargetTerm().getTitle().equals(comp.getMainTitle())).findFirst();
+                        .filter(c -> c.connection().targetTerm().getTitle().equals(comp.getMainTitle())).findFirst();
 
                 if(connection.isPresent()){
                     int indexOfMain = connections.indexOf(connection.get());
-                    connection.get().getConnection().getTargetTerm().getConnectionWiths().add(comp);
+                    connection.get().connection().targetTerm().getConnectionWiths().add(comp);
                     connections.set(indexOfMain, connection.get());
                 }
             }
 
         }
 
-        return Set.copyOf(connections.stream().map(ConnectionWithCountDTO::getConnection).toList());
+        return Set.copyOf(ConnectionWithMapper.INSTANCE.convertConnectionWithDTOtoCore(connections.stream().map(ConnectionWithCountDTO::connection).toList()));
     }
 
     @Override
@@ -109,8 +113,7 @@ public class TermService implements TermUseCase {
         Optional<TermContext> termContext = contextTermRepository.findByTitleOrSynonyms(term);
 
         if(termContext.isPresent()){
-            Term graph = new Term();
-            graph.setTitle(term);
+            Term graph = new Term(term);
             graph.setConnectionWiths(getMaxTermsOnScreen(term));
             graph.setContext(termContext.get());
             return Optional.of(graph);

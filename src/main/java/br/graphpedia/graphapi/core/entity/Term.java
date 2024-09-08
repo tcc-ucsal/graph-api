@@ -21,4 +21,8 @@ public class Term {
     private LocalDateTime updatedDate;
     private Set<ConnectionWith> connectionWiths = new HashSet<>();
     private TermContext context;
+
+    public Term(String title) {
+        this.title = title;
+    }
 }
