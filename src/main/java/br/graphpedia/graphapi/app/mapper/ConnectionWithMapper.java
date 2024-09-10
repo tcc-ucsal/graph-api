@@ -24,12 +24,9 @@ public interface ConnectionWithMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "mainTitle", ignore = true)
     @Mapping(source = "level", target = "relevanceLevel")
-    @Mapping(target = "targetTerm", expression = "java(getTerm(simpleConnectionWithDTO.term))")
+    @Mapping(target = "targetTerm.title", source = "term")
     ConnectionWith convertSimpleConnectionWithDTOtoCore(SimpleConnectionWithDTO simpleConnectionWithDTO);
 
     List<ConnectionWith> convertSimpleConnectionWithDTOtoCore(List<SimpleConnectionWithDTO> simpleConnectionWithDTOs);
 
-    default Term getTerm(String title){
-        return new Term(title);
-    }
 }

@@ -20,4 +20,10 @@ public class TermContext {
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private List<String> synonyms;
+
+    public TermContext(String title, String article, String source) {
+        this.title = title;
+        this.article = article;
+        this.source = source;
+    }
 }

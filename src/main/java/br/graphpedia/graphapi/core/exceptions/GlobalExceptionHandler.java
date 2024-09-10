@@ -26,4 +26,12 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(), ex.getMessage(), ex.getCause(), LocalDateTime.now());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler({ExternalApiException.class})
+    public ResponseEntity<Object> handleExternalApiException(
+            PersistenceException ex, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.SERVICE_UNAVAILABLE.value(), ex.getMessage(), ex.getCause(), LocalDateTime.now());
+        return new ResponseEntity<>(errorResponse, HttpStatus.SERVICE_UNAVAILABLE);
+    }
 }

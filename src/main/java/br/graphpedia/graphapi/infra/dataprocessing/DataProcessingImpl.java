@@ -3,6 +3,7 @@ package br.graphpedia.graphapi.infra.dataprocessing;
 import br.graphpedia.graphapi.app.dto.CompleteTermSearchDTO;
 import br.graphpedia.graphapi.app.interfaces.DataProcessingExternalService;
 import br.graphpedia.graphapi.core.entity.Term;
+import br.graphpedia.graphapi.core.exceptions.ExternalApiException;
 import br.graphpedia.graphapi.core.exceptions.PersistenceException;
 import br.graphpedia.graphapi.infra.dataprocessing.dto.ApiResponse;
 import br.graphpedia.graphapi.infra.dataprocessing.mapper.DataProcessingApiResponseMapper;
@@ -11,6 +12,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -42,11 +46,17 @@ public class DataProcessingImpl implements DataProcessingExternalService {
 
     @Override
     public CompleteTermSearchDTO getCompleteTerm(String term){
+        try {
+            ApiResponse data = restTemplate.getForObject(getUrl("/highlight/" + term), ApiResponse.class);
 
-        ApiResponse data = restTemplate.getForObject(getUrl("/highlight/" + term), ApiResponse.class);
+            return DataProcessingApiResponseMapper.INSTANCE.toCompleteTermSearchDTO(data);
 
-        //todo:ajustar esse mapeamento
-        return DataProcessingApiResponseMapper.INSTANCE.toCompleteTermSearchDTO(data);
+        } catch (HttpClientErrorException | HttpServerErrorException  e ) {
+            throw new ExternalApiException("Data-processing-error: " + e.getStatusCode() + " - " + e.getMessage(), e);
+
+        } catch (Exception e) {
+            throw new ExternalApiException("Data-processing-error: " + e.getMessage(), e);
+        }
     }
 
 
