@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({ExternalApiException.class})
+   // @ExceptionHandler({ExternalApiException.class})
     public ResponseEntity<Object> handleExternalApiException(
             PersistenceException ex, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(

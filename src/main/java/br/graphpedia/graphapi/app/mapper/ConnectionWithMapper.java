@@ -4,11 +4,13 @@ import br.graphpedia.graphapi.app.dto.ConnectionWithDTO;
 import br.graphpedia.graphapi.app.dto.SimpleConnectionWithDTO;
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
 import br.graphpedia.graphapi.core.entity.Term;
+import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
+@Mapper
 public interface ConnectionWithMapper {
 
     ConnectionWithMapper INSTANCE = Mappers.getMapper(ConnectionWithMapper.class);

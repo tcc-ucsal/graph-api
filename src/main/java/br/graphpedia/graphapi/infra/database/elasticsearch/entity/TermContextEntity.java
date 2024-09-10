@@ -10,6 +10,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -38,5 +39,5 @@ public class TermContextEntity {
     private LocalDateTime updatedDate;
 
     @Field(type = FieldType.Keyword, analyzer = "standard", searchAnalyzer = "standard")
-    private List<String> synonyms;
+    private List<String> synonyms = new ArrayList<>();
 }

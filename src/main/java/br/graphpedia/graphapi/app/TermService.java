@@ -43,14 +43,14 @@ public class TermService implements TermUseCase {
         Term graph;
         graph = dataProcessingUseCase.getCompleteTerm(term);
 
-        if(!term.equals(graph.getTitle())){
-            graph.getContext().getSynonyms().add(term);
+        if(!term.equalsIgnoreCase(graph.getTitle())){
+            graph.getContext().addSynonyms(term);
         }
 
         try{
             TermContext createdContext = contextTermRepository.save(graph.getContext());
+            structTermRepository.create(graph);
             graph.setContext(createdContext);
-            graph = structTermRepository.create(graph);
 
         }catch (Exception exception){
             contextTermRepository.deleteByTitle(graph.getTitle());
@@ -100,7 +100,6 @@ public class TermService implements TermUseCase {
 
     @Override
     public List<String> verifyNeedForContext(String termTitle) {
-        //TODO: IMPL
         return dataProcessingUseCase.getTermContext(termTitle);
     }
 

@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -26,4 +28,12 @@ public class TermContext {
         this.article = article;
         this.source = source;
     }
+
+    public void addSynonyms(String synonym){
+        if(Objects.isNull(synonyms))
+            setSynonyms(new ArrayList<>());
+
+        getSynonyms().add(synonym);
+    }
+
 }

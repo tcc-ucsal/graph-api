@@ -7,6 +7,7 @@ import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;
 import br.graphpedia.graphapi.core.usecase.DataProcessingUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,12 +19,13 @@ public class DataProcessingService implements DataProcessingUseCase {
     private final DataProcessingExternalService dataProcessingExternalService;
 
     @Autowired
-    public DataProcessingService(DataProcessingExternalService dataProcessingExternalService) {
+    public DataProcessingService(@Lazy DataProcessingExternalService dataProcessingExternalService) {
         this.dataProcessingExternalService = dataProcessingExternalService;
     }
 
     @Override
     public List<String> getTermContext(String term) {
+        //todo: impl
         return null;
     }
 

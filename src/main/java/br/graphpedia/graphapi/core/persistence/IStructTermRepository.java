@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IStructTermRepository {
 
-    Term create(Term term);
+    void create(Term term);
     List<ConnectionWithCountDTO> getConnectionsWithLevelOneCount(String title);
     void deleteAll();
     void deleteByTitleIfNotIncomingConnections(String title);

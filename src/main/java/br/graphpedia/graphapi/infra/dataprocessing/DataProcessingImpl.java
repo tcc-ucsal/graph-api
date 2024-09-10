@@ -5,7 +5,7 @@ import br.graphpedia.graphapi.app.interfaces.DataProcessingExternalService;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.exceptions.ExternalApiException;
 import br.graphpedia.graphapi.core.exceptions.PersistenceException;
-import br.graphpedia.graphapi.infra.dataprocessing.dto.ApiResponse;
+import br.graphpedia.graphapi.infra.dataprocessing.dto.DataProcessingApiResponse;
 import br.graphpedia.graphapi.infra.dataprocessing.mapper.DataProcessingApiResponseMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -47,7 +46,11 @@ public class DataProcessingImpl implements DataProcessingExternalService {
     @Override
     public CompleteTermSearchDTO getCompleteTerm(String term){
         try {
-            ApiResponse data = restTemplate.getForObject(getUrl("/highlight/" + term), ApiResponse.class);
+            //DataProcessingApiResponse data = restTemplate.getForObject(getUrl("/highlight/" + term), DataProcessingApiResponse.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            DataProcessingApiResponse data = objectMapper.readValue(new File("src/main/resources/graphMock.json"),
+                    DataProcessingApiResponse.class);
 
             return DataProcessingApiResponseMapper.INSTANCE.toCompleteTermSearchDTO(data);
 
@@ -60,12 +63,14 @@ public class DataProcessingImpl implements DataProcessingExternalService {
     }
 
 
-    public Term getCompleteTermTest(String term) {
+    public CompleteTermSearchDTO getCompleteTermTest(String term) {
         try{
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
 
-            return objectMapper.readValue(new File("src/main/resources/graphMock.json"), Term.class);
+            return DataProcessingApiResponseMapper.INSTANCE
+                    .toCompleteTermSearchDTO(objectMapper.readValue(new File("src/main/resources/graphMock.json"),
+                            DataProcessingApiResponse.class));
         }catch (Exception e){
             throw new PersistenceException(e.getMessage());
         }

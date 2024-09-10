@@ -33,9 +33,8 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
     }
 
     @Override
-    public Term create(Term term) {
+    public void create(Term term) {
         validateTerm(term);
-        List<TermEntity> cratedEntity;
         try {
             String cypher = "MERGE (termC:Term {title: $term.title}) " +
                     "ON CREATE SET " +
@@ -53,20 +52,10 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
                     "RETURN termC.id as id, termC.title as title, " +
                     "termC.createdDate as createdDate, termC.updatedDate as updatedDate";
 
-            cratedEntity = neo4jClient.query(cypher)
-                    .bind(Neo4jObjectConverter.convertToMap(term)).to("term")
-                    .fetchAs(TermEntity.class)
-                    .mappedBy((typeSystem, register) ->
-                            new TermEntity(register.get("id").asString(), register.get("title").asString(),
-                                    getLocalDateTimeByRecord(register, "createdDate"),
-                                    getLocalDateTimeByRecord(register,"updatedDate")))
-                    .all().stream().toList();
-
-            return TermNeo4jMapper.INSTANCE.toTermCore(cratedEntity.stream().findFirst()
-                    .orElseThrow(() -> new PersistenceException("Access result error")));
+            neo4jClient.query(cypher)
+                    .bind(Neo4jObjectConverter.convertToMap(term)).to("term");
 
         } catch (Exception exception){
-
             throw new PersistenceException(exception.getMessage(), exception.getCause());
         }
 
