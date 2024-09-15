@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "term": "Number",
+      "level": 1
+    },
+    {
+      "term": "Math",
+      "level": 1
+    },
+    {
+      "term": "sljksdf",
+      "level": 2
+    },
+    {
+      "term": "slkfsld",
+      "level": 3
+    },
+    {
+      "term": "slkdfsldk",
+      "level": 4
+    },
+    {
+      "term": "dhbfdhjf",
+      "level": 5
+    }
+  ],
+  "article": "Test One term",
+  "source": "www.exemple.com",
+  "searched_term": "One"
+}

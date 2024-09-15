@@ -1,0 +1,15 @@
+{
+  "nodes": [
+    {
+      "term": "Only one",
+      "level": 1
+    },
+    {
+      "term": "Xi",
+      "level": 4
+    }
+  ],
+  "article": "Test Example term",
+  "source": "www.exemple.com",
+  "searched_term": "Example"
+}

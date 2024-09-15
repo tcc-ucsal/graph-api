@@ -49,7 +49,7 @@ public class DataProcessingImpl implements DataProcessingExternalService {
             //DataProcessingApiResponse data = restTemplate.getForObject(getUrl("/highlight/" + term), DataProcessingApiResponse.class);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-            DataProcessingApiResponse data = objectMapper.readValue(new File("src/main/resources/graphMock.json"),
+            DataProcessingApiResponse data = objectMapper.readValue(new File("src/main/resources/mocks/computerTermMock.json"),
                     DataProcessingApiResponse.class);
 
             return DataProcessingApiResponseMapper.INSTANCE.toCompleteTermSearchDTO(data);
@@ -69,7 +69,7 @@ public class DataProcessingImpl implements DataProcessingExternalService {
             objectMapper.registerModule(new JavaTimeModule());
 
             return DataProcessingApiResponseMapper.INSTANCE
-                    .toCompleteTermSearchDTO(objectMapper.readValue(new File("src/main/resources/graphMock.json"),
+                    .toCompleteTermSearchDTO(objectMapper.readValue(new File("src/main/resources/computerTermMock.json"),
                             DataProcessingApiResponse.class));
         }catch (Exception e){
             throw new PersistenceException(e.getMessage());

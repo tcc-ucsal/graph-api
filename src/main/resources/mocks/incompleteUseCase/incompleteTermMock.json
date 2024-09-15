@@ -1,0 +1,39 @@
+{
+  "nodes": [
+    {
+      "term": "Test",
+      "level": 1
+    },
+    {
+      "term": "One",
+      "level": 1
+    },
+    {
+      "term": "Another",
+      "level": 1
+    },
+    {
+      "term": "Example",
+      "level": 1
+    },
+    {
+      "term": "Term",
+      "level": 2
+    },
+    {
+      "term": "Random",
+      "level": 3
+    },
+    {
+      "term": "Basic",
+      "level": 4
+    },
+    {
+      "term": "Last one",
+      "level": 5
+    }
+  ],
+  "article": "Test incomplete term",
+  "source": "www.exemple.com",
+  "searched_term": "Incomplete"
+}

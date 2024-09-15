@@ -1,0 +1,27 @@
+{
+  "nodes": [
+    {
+      "term": "Two",
+      "level": 1
+    },
+    {
+      "term": "AAAAA test",
+      "level": 1
+    },
+    {
+      "term": "Oh Yeha",
+      "level": 1
+    },
+    {
+      "term": "BBBB A",
+      "level": 2
+    },
+    {
+      "term": "CCCC B",
+      "level": 2
+    }
+  ],
+  "article": "Test term",
+  "source": "www.exemple.com",
+  "searched_term": "Test"
+}
