@@ -32,10 +32,10 @@ public class TermContextEntity {
     @Field(type = FieldType.Text)
     private String source;
 
-    @Field(type = FieldType.Date)
+    @Field(type = FieldType.Date, format = {}, pattern = "uuuu-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdDate;
 
-    @Field(type = FieldType.Date)
+    @Field(type = FieldType.Date, format = {}, pattern = "uuuu-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedDate;
 
     @Field(type = FieldType.Keyword, analyzer = "standard", searchAnalyzer = "standard")

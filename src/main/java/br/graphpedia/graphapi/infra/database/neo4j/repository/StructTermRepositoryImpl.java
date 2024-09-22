@@ -36,24 +36,43 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
     public void create(Term term) {
         validateTerm(term);
         try {
-            String cypher = "MERGE (termC:Term {title: $term.title}) " +
-                    "ON CREATE SET " +
-                    "              termC.title = $term.title, " +
-                    "              termC.createdDate = timestamp() " +
-                    "ON MATCH SET " +
-                    "              termC.source = $term.source, " +
-                    "              termC.updatedDate = timestamp() " +
-                    "WITH termC " +
-                    "UNWIND $term.connectionWiths AS connection " +
-                    "MERGE (term:Term {title: connection.targetTerm.title}) " +
-                    "MERGE (termC)-[c:CONNECTION_WITH {relevance_level: connection.relevanceLevel}]->(term) " +
-                    "   ON CREATE SET c.relevance_level = connection.relevanceLevel " +
-                    "   ON MATCH SET c.relevance_level = (CASE WHEN c.relevance_level >= connection.relevanceLevel THEN connection.relevanceLevel ELSE c.relevance_level END ) " +
-                    "RETURN termC.id as id, termC.title as title, " +
-                    "termC.createdDate as createdDate, termC.updatedDate as updatedDate";
+            String cypher = """
+            MERGE (termC:Term {title: $term.title})
+            ON CREATE SET\s
+                termC.title = $term.title,
+                termC.createdDate = timestamp()
+            ON MATCH SET
+                termC.source = $term.source,
+                termC.updatedDate = timestamp()
+            WITH termC
+            UNWIND $term.connectionWiths AS connection
+            MERGE (targetTerm:Term {title: connection.targetTerm.title})
+            MERGE (termC)-[c:CONNECTION_WITH {relevance_level: connection.relevanceLevel}]->(targetTerm)
+            ON CREATE SET
+                c.relevance_level = connection.relevanceLevel
+            ON MATCH SET
+                c.relevance_level = CASE
+                    WHEN c.relevance_level >= connection.relevanceLevel\s
+                    THEN connection.relevanceLevel\s
+                    ELSE c.relevance_level\s
+                END
+            RETURN\s
+                termC.id AS id,\s
+                termC.title AS title,\s
+                termC.createdDate AS createdDate,\s
+                termC.updatedDate AS updatedDate
+        """;
 
             neo4jClient.query(cypher)
-                    .bind(Neo4jObjectConverter.convertToMap(term)).to("term");
+                    .bind(Neo4jObjectConverter.convertToMap(term)).to("term")
+                    .fetchAs(TermEntity.class)
+                    .mappedBy((typeSystem, record) -> new TermEntity(
+                            record.get("id").asString(),
+                            record.get("title").asString(),
+                            getLocalDateTimeByRecord(record, "createdDate"),
+                            getLocalDateTimeByRecord(record, "updatedDate"))
+                    )
+                    .all();
 
         } catch (Exception exception){
             throw new PersistenceException(exception.getMessage(), exception.getCause());
@@ -137,9 +156,9 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
             """;
 
         return neo4jClient.query(query)
-                .bind(Neo4jObjectConverter.convertToMap(level)).to("$level")
-                .bind(Neo4jObjectConverter.convertToMap(titles)).to("$termTitles")
-                .bind(Neo4jObjectConverter.convertToMap(limit)).to("$limit")
+                .bind(level).to("level")
+                .bind(titles).to("termTitles")
+                .bind(limit).to("limit")
                 .fetchAs(ConnectionWith.class)
                 .mappedBy((typeSystem, register) -> {
 

@@ -55,7 +55,7 @@ public class TermService implements TermUseCase {
         }catch (Exception exception){
             contextTermRepository.deleteByTitle(graph.getTitle());
             structTermRepository.deleteByTitleIfNotIncomingConnections(graph.getTitle());
-            throw new PersistenceException("Error on save graph", exception.getCause());
+            throw new PersistenceException("Error on save graph", exception);
         }
 
         return graph;
@@ -63,25 +63,26 @@ public class TermService implements TermUseCase {
 
     private Set<ConnectionWith> getMaxTermsOnScreen(String term) {
 
-        List<ConnectionWithCountDTO> connections = structTermRepository.getConnectionsWithLevelOneCount(term);
+        List<ConnectionWithCountDTO> connections = new ArrayList<>(structTermRepository.getConnectionsWithLevelOneCount(term));
 
         if(connections.size() < MAX_SCREEN_NODES){
-           String[] complementTerms = (String[]) connections.stream()
+           String[] complementTerms = connections.stream()
                    .filter(c -> c.connectionsCount() > 0)
                    .map(c -> c.connection().targetTerm().getTitle())
-                   .toArray();
+                   .toArray(String[]::new);
 
             int limit = (MAX_SCREEN_NODES - connections.size()) > complementTerms.length ?
-                    Math.round((float) complementTerms.length / (MAX_SCREEN_NODES - connections.size())) :
+                    Math.round((MAX_SCREEN_NODES - connections.size()) / (float) complementTerms.length) :
                     2;
 
             List<ConnectionWith> complements = structTermRepository.getConnectionByLevel(complementTerms, 1, limit);
 
-            for(ConnectionWith comp : complements){
+            for (ConnectionWith comp : complements) {
                 Optional<ConnectionWithCountDTO> connection = connections.stream()
-                        .filter(c -> c.connection().targetTerm().getTitle().equals(comp.getMainTitle())).findFirst();
+                        .filter(c -> c.connection().targetTerm().getTitle().equals(comp.getMainTitle()))
+                        .findFirst();
 
-                if(connection.isPresent()){
+                if (connection.isPresent()) {
                     int indexOfMain = connections.indexOf(connection.get());
                     connection.get().connection().targetTerm().getConnectionWiths().add(comp);
                     connections.set(indexOfMain, connection.get());

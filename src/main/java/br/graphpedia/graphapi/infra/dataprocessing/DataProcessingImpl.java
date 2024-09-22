@@ -46,10 +46,10 @@ public class DataProcessingImpl implements DataProcessingExternalService {
     @Override
     public CompleteTermSearchDTO getCompleteTerm(String term){
         try {
-            //DataProcessingApiResponse data = restTemplate.getForObject(getUrl("/highlight/" + term), DataProcessingApiResponse.class);
+//            DataProcessingApiResponse data = restTemplate.getForObject(getUrl("/highlight/" + term), DataProcessingApiResponse.class);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-            DataProcessingApiResponse data = objectMapper.readValue(new File("src/main/resources/mocks/computerTermMock.json"),
+            DataProcessingApiResponse data = objectMapper.readValue(new File("src/main/resources/mocks/incompleteUseCase/oneTermMock.json"),
                     DataProcessingApiResponse.class);
 
             return DataProcessingApiResponseMapper.INSTANCE.toCompleteTermSearchDTO(data);
