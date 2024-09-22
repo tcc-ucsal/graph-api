@@ -66,14 +66,18 @@ public class TermService implements TermUseCase {
         List<ConnectionWithCountDTO> connections = new ArrayList<>(structTermRepository.getConnectionsWithLevelOneCount(term));
 
         if(connections.size() < MAX_SCREEN_NODES){
-           String[] complementTerms = connections.stream()
-                   .filter(c -> c.connectionsCount() > 0)
-                   .map(c -> c.connection().targetTerm().getTitle())
-                   .toArray(String[]::new);
 
-            int limit = (MAX_SCREEN_NODES - connections.size()) > complementTerms.length ?
-                    Math.round((MAX_SCREEN_NODES - connections.size()) / (float) complementTerms.length) :
-                    2;
+            int limit = connections.stream()
+                    .map(ConnectionWithCountDTO::connectionsCount)
+                    .filter(i -> i > 0)
+                    .max(Integer::compare)
+                    .map(i -> Math.min(i, 2))
+                    .orElse(0);
+
+            String[] complementTerms = connections.stream()
+                    .filter(c -> c.connectionsCount() > 0)
+                    .map(c -> c.connection().targetTerm().getTitle())
+                    .toArray(String[]::new);
 
             List<ConnectionWith> complements = structTermRepository.getConnectionByLevel(complementTerms, 1, limit);
 
