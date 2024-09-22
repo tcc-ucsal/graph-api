@@ -38,6 +38,6 @@ public class TermContextEntity {
     @Field(type = FieldType.Date, format = {}, pattern = "uuuu-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedDate;
 
-    @Field(type = FieldType.Keyword, analyzer = "standard", searchAnalyzer = "standard")
+    @Field(type = FieldType.Keyword, searchAnalyzer = "standard")
     private List<String> synonyms = new ArrayList<>();
 }

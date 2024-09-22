@@ -10,7 +10,6 @@ public interface IStructTermRepository {
 
     void create(Term term);
     List<ConnectionWithCountDTO> getConnectionsWithLevelOneCount(String title);
-    void deleteAll();
     void deleteByTitleIfNotIncomingConnections(String title);
     List<ConnectionWith> getConnectionByLevel(String[] titles, int level, int limit);
 }

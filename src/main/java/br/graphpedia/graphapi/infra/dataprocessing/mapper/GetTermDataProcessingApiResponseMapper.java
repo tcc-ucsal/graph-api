@@ -7,8 +7,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface DataProcessingApiResponseMapper {
-    DataProcessingApiResponseMapper INSTANCE = Mappers.getMapper(DataProcessingApiResponseMapper.class);
+public interface GetTermDataProcessingApiResponseMapper {
+    GetTermDataProcessingApiResponseMapper INSTANCE = Mappers.getMapper(GetTermDataProcessingApiResponseMapper.class);
 
     @Mapping(source = "nodes", target = "connections")
     @Mapping(source = "article", target = "article")

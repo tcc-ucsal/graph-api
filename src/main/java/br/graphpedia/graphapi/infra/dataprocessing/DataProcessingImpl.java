@@ -6,7 +6,7 @@ import br.graphpedia.graphapi.core.exceptions.ExternalApiException;
 import br.graphpedia.graphapi.core.exceptions.PersistenceException;
 import br.graphpedia.graphapi.infra.dataprocessing.dto.GetTermDataProcessingApiResponse;
 import br.graphpedia.graphapi.infra.dataprocessing.dto.SearchOptionsDataProcessingApiResponse;
-import br.graphpedia.graphapi.infra.dataprocessing.mapper.DataProcessingApiResponseMapper;
+import br.graphpedia.graphapi.infra.dataprocessing.mapper.GetTermDataProcessingApiResponseMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,21 +39,12 @@ public class DataProcessingImpl implements DataProcessingExternalService {
                 .toUriString();
     }
 
-    public List<String> getTermContext(String term) {
-        //return List.of("Manga (Fruta)", "Manga (MG)", "Manga (Camisa)", "Manga (Fut)");
-        return null;
-    }
-
     @Override
     public CompleteTermSearchDTO getCompleteTerm(String term){
         try {
-//            DataProcessingApiResponse data = restTemplate.getForObject(getUrl("/highlight/" + term), DataProcessingApiResponse.class);
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
-            GetTermDataProcessingApiResponse data = objectMapper.readValue(new File("src/main/resources/mocks/incompleteUseCase/oneTermMock.json"),
-                    GetTermDataProcessingApiResponse.class);
+            GetTermDataProcessingApiResponse data = restTemplate.getForObject(getUrl("/highlight/" + term), GetTermDataProcessingApiResponse.class);
 
-            return DataProcessingApiResponseMapper.INSTANCE.toCompleteTermSearchDTO(data);
+            return GetTermDataProcessingApiResponseMapper.INSTANCE.toCompleteTermSearchDTO(data);
 
         } catch (HttpClientErrorException | HttpServerErrorException  e ) {
             throw new ExternalApiException("Data-processing-error: " + e.getStatusCode() + " - " + e.getMessage(), e);
@@ -76,7 +67,7 @@ public class DataProcessingImpl implements DataProcessingExternalService {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
 
-            return DataProcessingApiResponseMapper.INSTANCE
+            return GetTermDataProcessingApiResponseMapper.INSTANCE
                     .toCompleteTermSearchDTO(objectMapper.readValue(new File("src/main/resources/computerTermMock.json"),
                             GetTermDataProcessingApiResponse.class));
         }catch (Exception e){

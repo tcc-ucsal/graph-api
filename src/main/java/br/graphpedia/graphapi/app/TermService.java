@@ -99,11 +99,6 @@ public class TermService implements TermUseCase {
     }
 
     @Override
-    public void deleteAll() {
-        structTermRepository.deleteAll();
-    }
-
-    @Override
     public List<String> verifyNeedForContext(String termTitle) {
         return dataProcessingUseCase.getTermContext(termTitle);
     }

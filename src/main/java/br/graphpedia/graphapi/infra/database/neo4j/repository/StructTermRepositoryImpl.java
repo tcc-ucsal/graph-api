@@ -18,7 +18,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class StructTermRepositoryImpl implements IStructTermRepository {
@@ -130,10 +129,6 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
 
         return register.get(fieldName).isNull() ? null :
                 LocalDateTime.ofInstant(Instant.ofEpochSecond(register.get(fieldName).asLong()), ZoneId.of("America/Sao_Paulo"));
-    }
-
-    public void deleteAll(){
-        neo4jTermRepository.deleteAll();
     }
 
     @Override

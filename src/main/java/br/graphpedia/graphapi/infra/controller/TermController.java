@@ -36,15 +36,4 @@ public class TermController {
                         ResponseEntity.ok().body(TermContextResponseMapper.INSTANCE.toResponse(context)))
                             .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-    @GetMapping("/")
-    public ResponseEntity<Term> findAll(){
-      return null;
-    }
-
-    @DeleteMapping("/")
-    public ResponseEntity<Object> deleteAll(){
-        termUseCase.deleteAll();
-        return ResponseEntity.noContent().build();
-    }
 }

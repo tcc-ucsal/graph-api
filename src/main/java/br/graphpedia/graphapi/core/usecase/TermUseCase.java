@@ -10,8 +10,6 @@ public interface TermUseCase {
 
     Term getGraph(String term);
 
-    void deleteAll();
-
     List<String> verifyNeedForContext(String termTitle);
 
     Optional<TermContext> getContextByTitle(String term);
