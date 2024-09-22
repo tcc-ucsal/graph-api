@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  graph-api:
+    build: .
+    image: graph-api
+    container_name: graph_api_app
+    command: java -jar -Dspring.profiles.active=dev /app/graph-api.jar
+    ports:
+      - "8080:8080"
+    env_file: ".env"
+    depends_on:
+      - neo4j
+      - elasticsearch
+    networks:
+      - spring_network
+
+  neo4j:
+    image: neo4j:5.12.0
+    container_name: neo4j_db
+    ports:
+      - "${NEO4J_PORT}:${NEO4J_PORT}"
+    environment:
+      - NEO4J_AUTH=${NEO4J_USERNAME}/${NEO4J_PASSWORD}
+    volumes:
+      - neo4j_data:/data
+    networks:
+      - spring_network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.23
+    container_name: elasticsearch_service
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "${ELASTIC_PORT}:${ELASTIC_PORT}"
+    networks:
+      - spring_network
+
+volumes:
+  neo4j_data:
+  es_data:
+
+networks:
+  spring_network:
+    driver: bridge
