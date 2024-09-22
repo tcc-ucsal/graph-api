@@ -1,7 +1,7 @@
 package br.graphpedia.graphapi.infra.dataprocessing.mapper;
 
 import br.graphpedia.graphapi.app.dto.CompleteTermSearchDTO;
-import br.graphpedia.graphapi.infra.dataprocessing.dto.DataProcessingApiResponse;
+import br.graphpedia.graphapi.infra.dataprocessing.dto.GetTermDataProcessingApiResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -12,6 +12,6 @@ public interface DataProcessingApiResponseMapper {
 
     @Mapping(source = "nodes", target = "connections")
     @Mapping(source = "article", target = "article")
-    CompleteTermSearchDTO toCompleteTermSearchDTO(DataProcessingApiResponse dataProcessingApiResponse);
+    CompleteTermSearchDTO toCompleteTermSearchDTO(GetTermDataProcessingApiResponse getTermDataProcessingApiResponse);
 
 }

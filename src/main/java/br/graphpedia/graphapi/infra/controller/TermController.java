@@ -4,6 +4,7 @@ import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;
 import br.graphpedia.graphapi.core.usecase.TermUseCase;
 import br.graphpedia.graphapi.infra.controller.mapper.TermContextResponseMapper;
+import br.graphpedia.graphapi.infra.controller.mapper.TermResponseMapper;
 import br.graphpedia.graphapi.infra.controller.responses.TermContextResponse;
 import br.graphpedia.graphapi.infra.controller.responses.TermResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,8 @@ public class TermController {
     }
 
     @GetMapping("/{term}")
-    public ResponseEntity<Term> getGraph(@PathVariable String term){
-        return ResponseEntity.ok().body(termUseCase.getGraph(term));
+    public ResponseEntity<TermResponse> getGraph(@PathVariable String term){
+        return ResponseEntity.ok().body(TermResponseMapper.INSTANCE.toResponse(termUseCase.getGraph(term)));
     }
 
     @GetMapping("/context/{term}")

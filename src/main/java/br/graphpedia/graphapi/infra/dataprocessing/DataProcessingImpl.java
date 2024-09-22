@@ -2,10 +2,10 @@ package br.graphpedia.graphapi.infra.dataprocessing;
 
 import br.graphpedia.graphapi.app.dto.CompleteTermSearchDTO;
 import br.graphpedia.graphapi.app.interfaces.DataProcessingExternalService;
-import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.exceptions.ExternalApiException;
 import br.graphpedia.graphapi.core.exceptions.PersistenceException;
-import br.graphpedia.graphapi.infra.dataprocessing.dto.DataProcessingApiResponse;
+import br.graphpedia.graphapi.infra.dataprocessing.dto.GetTermDataProcessingApiResponse;
+import br.graphpedia.graphapi.infra.dataprocessing.dto.SearchOptionsDataProcessingApiResponse;
 import br.graphpedia.graphapi.infra.dataprocessing.mapper.DataProcessingApiResponseMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -19,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class DataProcessingImpl implements DataProcessingExternalService {
@@ -49,8 +50,8 @@ public class DataProcessingImpl implements DataProcessingExternalService {
 //            DataProcessingApiResponse data = restTemplate.getForObject(getUrl("/highlight/" + term), DataProcessingApiResponse.class);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-            DataProcessingApiResponse data = objectMapper.readValue(new File("src/main/resources/mocks/incompleteUseCase/oneTermMock.json"),
-                    DataProcessingApiResponse.class);
+            GetTermDataProcessingApiResponse data = objectMapper.readValue(new File("src/main/resources/mocks/incompleteUseCase/oneTermMock.json"),
+                    GetTermDataProcessingApiResponse.class);
 
             return DataProcessingApiResponseMapper.INSTANCE.toCompleteTermSearchDTO(data);
 
@@ -62,6 +63,13 @@ public class DataProcessingImpl implements DataProcessingExternalService {
         }
     }
 
+    @Override
+    public List<String> getSearchOptions(String term) {
+        SearchOptionsDataProcessingApiResponse data = restTemplate.getForObject(getUrl("/get_search_options/" + term + "/4"), SearchOptionsDataProcessingApiResponse.class);
+
+        return Objects.isNull(data) ? List.of() :  data.result();
+    }
+
 
     public CompleteTermSearchDTO getCompleteTermTest(String term) {
         try{
@@ -70,7 +78,7 @@ public class DataProcessingImpl implements DataProcessingExternalService {
 
             return DataProcessingApiResponseMapper.INSTANCE
                     .toCompleteTermSearchDTO(objectMapper.readValue(new File("src/main/resources/computerTermMock.json"),
-                            DataProcessingApiResponse.class));
+                            GetTermDataProcessingApiResponse.class));
         }catch (Exception e){
             throw new PersistenceException(e.getMessage());
         }

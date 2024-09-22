@@ -25,8 +25,7 @@ public class DataProcessingService implements DataProcessingUseCase {
 
     @Override
     public List<String> getTermContext(String term) {
-        //todo: impl
-        return null;
+        return dataProcessingExternalService.getSearchOptions(term);
     }
 
     @Override

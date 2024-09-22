@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ConnectionWithResponse {
-    private Integer relevanceLevel;
-    private SimpleTermResponse term;
+public class SimpleTermResponse {
+    private String title;
+    private Set<ConnectionWithResponse> connectionWiths;
 }
