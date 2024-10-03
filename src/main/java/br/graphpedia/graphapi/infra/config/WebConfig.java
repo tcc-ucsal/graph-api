@@ -12,11 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     private final NeedForContextInterceptor needForContextInterceptor;
 
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
     @Autowired
     public WebConfig(NeedForContextInterceptor needForContextInterceptor) {
         this.needForContextInterceptor = needForContextInterceptor;

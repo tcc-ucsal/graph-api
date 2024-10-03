@@ -1,47 +1,47 @@
 package br.graphpedia.graphapi.app;
 
+import br.graphpedia.graphapi.app.dto.ConnectionWithCountDTO;
 import br.graphpedia.graphapi.app.mapper.ConnectionWithMapper;
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
-import br.graphpedia.graphapi.app.dto.ConnectionWithCountDTO;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;
 import br.graphpedia.graphapi.core.exceptions.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.IContextTermRepository;
 import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
-import br.graphpedia.graphapi.core.usecase.DataProcessingUseCase;
-import br.graphpedia.graphapi.core.usecase.TermUseCase;
-import org.springframework.transaction.annotation.Transactional;
+import br.graphpedia.graphapi.core.usecase.GetCompleteTermUseCase;
+import br.graphpedia.graphapi.core.usecase.GetGraphUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
-public class TermService implements TermUseCase {
+public class GetGraphService implements GetGraphUseCase {
 
     private static final int MAX_SCREEN_NODES = 30;
     private final IStructTermRepository structTermRepository;
 
     private final IContextTermRepository contextTermRepository;
 
-    private final DataProcessingUseCase dataProcessingUseCase;
+    private final GetCompleteTermUseCase getCompleteTermUseCase;
 
     @Autowired
-    public TermService(IStructTermRepository structTermRepository, IContextTermRepository contextTermRepository, DataProcessingUseCase dataProcessingUseCase) {
+    public GetGraphService(IStructTermRepository structTermRepository, IContextTermRepository contextTermRepository, GetCompleteTermUseCase getCompleteTermUseCase) {
         this.structTermRepository = structTermRepository;
         this.contextTermRepository = contextTermRepository;
-        this.dataProcessingUseCase = dataProcessingUseCase;
+        this.getCompleteTermUseCase = getCompleteTermUseCase;
     }
 
     @Override
-    @Transactional
-    public Term getGraph(String term) {
-
+    public Term execute(String term) {
         Optional<Term> optTerm = getExistingGraph(term);
         if (optTerm.isPresent()) return optTerm.get();
 
         Term graph;
-        graph = dataProcessingUseCase.getCompleteTerm(term);
+        graph = getCompleteTermUseCase.execute(term);
 
         if(!term.equalsIgnoreCase(graph.getTitle())){
             graph.getContext().addSynonyms(term);
@@ -59,6 +59,18 @@ public class TermService implements TermUseCase {
         }
 
         return graph;
+    }
+
+    private Optional<Term> getExistingGraph(String term) {
+        Optional<TermContext> termContext = contextTermRepository.findByTitleOrSynonyms(term);
+
+        if(termContext.isPresent()){
+            Term graph = new Term(term);
+            graph.setConnectionWiths(getMaxTermsOnScreen(term));
+            graph.setContext(termContext.get());
+            return Optional.of(graph);
+        }
+        return Optional.empty();
     }
 
     private Set<ConnectionWith> getMaxTermsOnScreen(String term) {
@@ -97,28 +109,4 @@ public class TermService implements TermUseCase {
 
         return Set.copyOf(ConnectionWithMapper.INSTANCE.convertConnectionWithDTOtoCore(connections.stream().map(ConnectionWithCountDTO::connection).toList()));
     }
-
-    @Override
-    public List<String> verifyNeedForContext(String termTitle) {
-        return dataProcessingUseCase.getTermContext(termTitle);
-    }
-
-    @Override
-    public Optional<TermContext> getContextByTitle(String term) {
-        return contextTermRepository.findByTitleOrSynonyms(term);
-    }
-
-    private Optional<Term> getExistingGraph(String term) {
-        Optional<TermContext> termContext = contextTermRepository.findByTitleOrSynonyms(term);
-
-        if(termContext.isPresent()){
-            Term graph = new Term(term);
-            graph.setConnectionWiths(getMaxTermsOnScreen(term));
-            graph.setContext(termContext.get());
-            return Optional.of(graph);
-        }
-        return Optional.empty();
-    }
-
-
 }

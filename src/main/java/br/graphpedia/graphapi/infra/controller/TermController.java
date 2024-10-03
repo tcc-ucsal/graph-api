@@ -1,8 +1,8 @@
 package br.graphpedia.graphapi.infra.controller;
 
-import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;
-import br.graphpedia.graphapi.core.usecase.TermUseCase;
+import br.graphpedia.graphapi.core.usecase.GetGraphUseCase;
+import br.graphpedia.graphapi.core.usecase.GetTermContextUseCase;
 import br.graphpedia.graphapi.infra.controller.mapper.TermContextResponseMapper;
 import br.graphpedia.graphapi.infra.controller.mapper.TermResponseMapper;
 import br.graphpedia.graphapi.infra.controller.responses.TermContextResponse;
@@ -17,21 +17,24 @@ import java.util.Optional;
 @RequestMapping("/term")
 public class TermController {
 
-    private final TermUseCase termUseCase;
+    private final GetGraphUseCase getGraphUseCase;
+
+    private final GetTermContextUseCase getTermContextUseCase;
 
     @Autowired
-    public TermController(TermUseCase termUseCase) {
-        this.termUseCase = termUseCase;
+    public TermController(GetGraphUseCase getGraphUseCase, GetTermContextUseCase getTermContextUseCase) {
+        this.getGraphUseCase = getGraphUseCase;
+        this.getTermContextUseCase = getTermContextUseCase;
     }
 
     @GetMapping("/{term}")
     public ResponseEntity<TermResponse> getGraph(@PathVariable String term){
-        return ResponseEntity.ok().body(TermResponseMapper.INSTANCE.toResponse(termUseCase.getGraph(term)));
+        return ResponseEntity.ok().body(TermResponseMapper.INSTANCE.toResponse(getGraphUseCase.execute(term)));
     }
 
     @GetMapping("/context/{term}")
     public ResponseEntity<TermContextResponse> getContext(@PathVariable String term){
-        Optional<TermContext> termContext = termUseCase.getContextByTitle(term);
+        Optional<TermContext> termContext = getTermContextUseCase.getByTitle(term);
         return termContext.map(context ->
                         ResponseEntity.ok().body(TermContextResponseMapper.INSTANCE.toResponse(context)))
                             .orElseGet(() -> ResponseEntity.notFound().build());

@@ -1,7 +1,7 @@
 package br.graphpedia.graphapi.infra.controller.interceptor;
 
 import br.graphpedia.graphapi.core.entity.Term;
-import br.graphpedia.graphapi.core.usecase.TermUseCase;
+import br.graphpedia.graphapi.core.usecase.VerifyNeedForContextUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -19,17 +19,17 @@ import java.util.Objects;
 @Component
 public class NeedForContextInterceptor implements HandlerInterceptor {
 
-    private TermUseCase termUseCase;
+    private final VerifyNeedForContextUseCase verifyNeedForContextUseCase;
 
     @Autowired
-    public NeedForContextInterceptor(TermUseCase termUseCase) {
-        this.termUseCase = termUseCase;
+    public NeedForContextInterceptor(VerifyNeedForContextUseCase verifyNeedForContextUseCase) {
+        this.verifyNeedForContextUseCase = verifyNeedForContextUseCase;
     }
 
     @Override 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        List<String> contexts = termUseCase.verifyNeedForContext(extractTermFromRequest(request));
+        List<String> contexts = verifyNeedForContextUseCase.execute(extractTermFromRequest(request));
 
         if (Objects.nonNull(contexts) && !contexts.isEmpty()) {
             ObjectMapper objectMapper = new ObjectMapper();

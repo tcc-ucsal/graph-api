@@ -28,6 +28,7 @@ public class ElasticsearchConfig {
                 .withBasicAuth(elasticsearchUsername, elasticsearchPassword)
                 .build();
 
+
     }
 
 
