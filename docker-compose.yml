@@ -1,4 +1,4 @@
-version: '3.8'
+version: '0.1.0'
 
 services:
   graph-api:
@@ -53,3 +53,4 @@ volumes:
 networks:
   spring_network:
     driver: bridge
+    external: true

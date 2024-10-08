@@ -5,7 +5,6 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean install || { echo 'Maven build failed'; exit 1; }
 
-# Stage 2: Run the application
 FROM openjdk:17-alpine
 WORKDIR /app
 COPY --from=build /app/target/graph-api-0.1.0.jar ./graph-api.jar
