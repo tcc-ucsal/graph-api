@@ -8,7 +8,7 @@ import br.graphpedia.graphapi.core.entity.TermContext;
 import br.graphpedia.graphapi.core.exceptions.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.IContextTermRepository;
 import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
-import br.graphpedia.graphapi.core.usecase.GetCompleteTermUseCase;
+import br.graphpedia.graphapi.core.usecase.GetCompleteSearchUseCase;
 import br.graphpedia.graphapi.core.usecase.GetGraphUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,13 +26,13 @@ public class GetGraphService implements GetGraphUseCase {
 
     private final IContextTermRepository contextTermRepository;
 
-    private final GetCompleteTermUseCase getCompleteTermUseCase;
+    private final GetCompleteSearchUseCase getCompleteSearchUseCase;
 
     @Autowired
-    public GetGraphService(IStructTermRepository structTermRepository, IContextTermRepository contextTermRepository, GetCompleteTermUseCase getCompleteTermUseCase) {
+    public GetGraphService(IStructTermRepository structTermRepository, IContextTermRepository contextTermRepository, GetCompleteSearchUseCase getCompleteSearchUseCase) {
         this.structTermRepository = structTermRepository;
         this.contextTermRepository = contextTermRepository;
-        this.getCompleteTermUseCase = getCompleteTermUseCase;
+        this.getCompleteSearchUseCase = getCompleteSearchUseCase;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class GetGraphService implements GetGraphUseCase {
         if (optTerm.isPresent()) return optTerm.get();
 
         Term graph;
-        graph = getCompleteTermUseCase.execute(term);
+        graph = getCompleteSearchUseCase.execute(term);
 
         if(!term.equalsIgnoreCase(graph.getTitle())){
             graph.getContext().addSynonyms(term);

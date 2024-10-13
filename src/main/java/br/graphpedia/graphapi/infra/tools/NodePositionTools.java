@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.infra.controller.tools;
+package br.graphpedia.graphapi.infra.tools;
 
 import br.graphpedia.graphapi.infra.controller.responses.ConnectionWithResponse;
 import br.graphpedia.graphapi.infra.controller.responses.Coordinates;
@@ -10,7 +10,7 @@ import java.util.Set;
 public class NodePositionTools {
 
     private NodePositionTools(){}
-    
+
     public static void radialTreeLayout(TermResponse root) {
         preOrder(root, 0, 0, 2 * Math.PI);
     }

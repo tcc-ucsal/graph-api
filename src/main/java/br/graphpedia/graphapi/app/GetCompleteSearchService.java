@@ -5,19 +5,19 @@ import br.graphpedia.graphapi.app.interfaces.GetCompleteTermExternalService;
 import br.graphpedia.graphapi.app.mapper.ConnectionWithMapper;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;
-import br.graphpedia.graphapi.core.usecase.GetCompleteTermUseCase;
+import br.graphpedia.graphapi.core.usecase.GetCompleteSearchUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
-public class GetCompleteTermService implements GetCompleteTermUseCase {
+public class GetCompleteSearchService implements GetCompleteSearchUseCase {
 
     private final GetCompleteTermExternalService getCompleteTermExternalService;
 
     @Autowired
-    public GetCompleteTermService(GetCompleteTermExternalService getCompleteTermExternalService) {
+    public GetCompleteSearchService(GetCompleteTermExternalService getCompleteTermExternalService) {
         this.getCompleteTermExternalService = getCompleteTermExternalService;
     }
 
