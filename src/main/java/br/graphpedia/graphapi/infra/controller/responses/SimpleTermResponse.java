@@ -11,5 +11,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class SimpleTermResponse {
     private String title;
+    private Coordinates coordinates;
     private Set<ConnectionWithResponse> connectionWiths;
 }

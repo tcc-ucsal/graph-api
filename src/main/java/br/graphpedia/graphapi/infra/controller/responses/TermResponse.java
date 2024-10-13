@@ -15,6 +15,7 @@ import java.util.Set;
 public class TermResponse {
     private String id;
     private String title;
+    private Coordinates coordinates;
     private Set<ConnectionWithResponse> connectionWiths = new HashSet<>();
     private TermContextResponse context;
 }
