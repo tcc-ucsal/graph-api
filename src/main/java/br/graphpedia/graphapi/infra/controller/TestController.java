@@ -21,7 +21,7 @@ import java.util.Optional;
 @RequestMapping("/test/term")
 public class TestController {
 
-    private TestPopulationService testPopulationService;
+    private final TestPopulationService testPopulationService;
 
     @Autowired
     public TestController(TestPopulationService testPopulationService) {
