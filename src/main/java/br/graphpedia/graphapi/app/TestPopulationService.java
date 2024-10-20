@@ -1,11 +1,16 @@
 package br.graphpedia.graphapi.app;
 
+import br.graphpedia.graphapi.app.dto.CompleteTermSearchDTO;
+import br.graphpedia.graphapi.app.mapper.ConnectionWithMapper;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;
 import br.graphpedia.graphapi.core.exceptions.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.IContextTermRepository;
 import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
 import br.graphpedia.graphapi.core.usecase.test.TestPopulationUseCase;
+import br.graphpedia.graphapi.infra.dataprocessing.dto.GetTermDataProcessingApiResponse;
+import br.graphpedia.graphapi.infra.dataprocessing.dto.SearchOptionsDataProcessingApiResponse;
+import br.graphpedia.graphapi.infra.dataprocessing.mapper.GetTermDataProcessingApiResponseMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class TestPopulationService implements TestPopulationUseCase {
@@ -39,12 +45,11 @@ public class TestPopulationService implements TestPopulationUseCase {
 
     @Override
     public void execute() {
-        ObjectMapper objectMapper = new ObjectMapper();
 
         mocks.forEach(mockFile -> {
             Term graph = new Term("Test Term");
             try {
-                graph = objectMapper.readValue(new File(PATH_MOCKS + mockFile), Term.class);
+                populateTerm(mockFile, graph);
 
                 TermContext createdContext = contextTermRepository.save(graph.getContext());
                 structTermRepository.create(graph);
@@ -60,14 +65,25 @@ public class TestPopulationService implements TestPopulationUseCase {
 
     }
 
+    private static void populateTerm(String mockFile, Term graph) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        CompleteTermSearchDTO result = GetTermDataProcessingApiResponseMapper.INSTANCE
+                .toCompleteTermSearchDTO(objectMapper.readValue(new File(PATH_MOCKS + mockFile),
+                        GetTermDataProcessingApiResponse.class));
+
+        graph.setTitle(result.searched_term());
+        graph.setConnectionWiths(Set.copyOf(ConnectionWithMapper.INSTANCE.convertSimpleConnectionWithDTOtoCore(result.connections())));
+        graph.setContext(new TermContext(result.searched_term(), result.article(), result.source()));
+    }
+
     @Override
     public List<String> listMockNames() {
         List<String> result = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper();
-
         mocks.forEach(mock -> {
             try {
-                Term graph = objectMapper.readValue(new File(PATH_MOCKS + mock), Term.class);
+                Term graph = new Term("Test Term");
+                populateTerm(mock, graph);
                 result.add(graph.getTitle());
             } catch (IOException e) {
                 throw new RuntimeException(e);
