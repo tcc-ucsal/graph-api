@@ -1,14 +1,10 @@
 package br.graphpedia.graphapi;
 
-import br.graphpedia.graphapi.infra.database.neo4j.repository.Neo4jTermRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
