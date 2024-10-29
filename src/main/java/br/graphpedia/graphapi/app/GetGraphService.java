@@ -13,10 +13,7 @@ import br.graphpedia.graphapi.core.usecase.GetGraphUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class GetGraphService implements GetGraphUseCase {
@@ -65,7 +62,7 @@ public class GetGraphService implements GetGraphUseCase {
         Optional<TermContext> termContext = contextTermRepository.findByTitleOrSynonyms(term);
 
         if(termContext.isPresent()){
-            Term graph = new Term(term);
+            Term graph = new Term(termContext.get().getTitle());
             graph.setConnectionWiths(getMaxTermsOnScreen(term));
             graph.setContext(termContext.get());
             return Optional.of(graph);

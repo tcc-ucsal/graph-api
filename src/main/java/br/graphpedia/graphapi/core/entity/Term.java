@@ -6,9 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -24,5 +23,12 @@ public class Term {
 
     public Term(String title) {
         this.title = title;
+    }
+
+    public void setConnectionWiths(Set<ConnectionWith> connectionWiths) {
+        this.connectionWiths = connectionWiths;
+        this.connectionWiths = this.connectionWiths.stream()
+                .sorted(Comparator.comparing(ConnectionWith::getRelevanceLevel))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

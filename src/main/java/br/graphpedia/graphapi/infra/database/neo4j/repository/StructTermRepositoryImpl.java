@@ -83,7 +83,7 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
     public List<ConnectionWithCountDTO> getConnectionsWithLevelOneCount(String title) {
         String query = """
             MATCH (t:Term)-[r:CONNECTION_WITH]->(target:Term)
-            WHERE t.title = $termTitle
+            WHERE toLower(t.title) = toLower($termTitle)
             OPTIONAL MATCH (target)-[c:CONNECTION_WITH {relevance_level: 1}]->(other)
             WITH target, r, COUNT(other) as connectionCount
             RETURN target, r, connectionCount
