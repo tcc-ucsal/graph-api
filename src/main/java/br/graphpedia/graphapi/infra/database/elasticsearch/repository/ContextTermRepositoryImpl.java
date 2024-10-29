@@ -37,8 +37,10 @@ public class ContextTermRepositoryImpl implements IContextTermRepository {
     @Override
     public Optional<TermContext> findByTitleOrSynonyms(String term) {
         try{
-            Criteria criteria = new Criteria("title").is(term)
-                    .or(new Criteria("synonyms").is(term));
+            term = term.toLowerCase();
+
+            Criteria criteria = new Criteria("title").expression(term)
+                    .or(new Criteria("synonyms").expression(term));
 
             CriteriaQuery query = new CriteriaQuery(criteria);
             SearchHits<TermContextEntity> searchHits = elasticsearchOperations.search(query, TermContextEntity.class);
