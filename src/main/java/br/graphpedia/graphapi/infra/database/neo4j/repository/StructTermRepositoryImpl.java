@@ -7,7 +7,6 @@ import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.exceptions.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
 import br.graphpedia.graphapi.infra.database.neo4j.entity.TermEntity;
-import br.graphpedia.graphapi.infra.database.neo4j.mapper.TermNeo4jMapper;
 import br.graphpedia.graphapi.infra.utils.Neo4jObjectConverter;
 import org.neo4j.driver.Value;
 import org.springframework.beans.factory.annotation.Autowired;
