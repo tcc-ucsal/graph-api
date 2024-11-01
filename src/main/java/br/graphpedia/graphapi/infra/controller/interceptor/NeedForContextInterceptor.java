@@ -15,6 +15,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class NeedForContextInterceptor implements HandlerInterceptor {
@@ -51,9 +53,15 @@ public class NeedForContextInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private String extractTermFromRequest(HttpServletRequest request) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        Term requestObject = mapper.readValue(request.getInputStream(), Term.class);
-        return requestObject.getTitle();
+    private String extractTermFromRequest(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        Pattern pattern = Pattern.compile("/term/([^/]+)");
+        Matcher matcher = pattern.matcher(uri);
+
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+
+        throw new IllegalArgumentException("Invalid URL: " + uri);
     }
 }

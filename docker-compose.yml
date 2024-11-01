@@ -12,45 +12,89 @@ services:
     depends_on:
       - neo4j
       - elasticsearch
+    links:
+      - neo4j
+      - elasticsearch
     networks:
-      - spring_network
+      - graphpedia-network
 
   neo4j:
     image: neo4j:5.12.0
     container_name: neo4j_db
     ports:
-      - "${NEO4J_PORT}:${NEO4J_PORT}"
+      - "7474:7474"
+      - "7687:7687"
     environment:
       - NEO4J_AUTH=${NEO4J_USERNAME}/${NEO4J_PASSWORD}
     volumes:
       - neo4j_data:/data
     networks:
-      - spring_network
+      - graphpedia-network
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.17.23
     container_name: elasticsearch_service
     environment:
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
       - ELASTIC_USERNAME=${ELASTIC_USERNAME}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
+      - "discovery.type=single-node"
     volumes:
       - es_data:/usr/share/elasticsearch/data
     ports:
-      - "${ELASTIC_PORT}:${ELASTIC_PORT}"
+      - "9200:9200"
     networks:
-      - spring_network
+      - graphpedia-network
+
+  index-setup:
+    image: curlimages/curl:7.85.0
+    container_name: elasticsearch_index_setup
+    entrypoint: ["sh", "-c"]
+    environment:
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    command:
+      - |
+        until curl -u $${ELASTIC_USERNAME}:$${ELASTIC_PASSWORD} -s http://elasticsearch_service:9200; do
+          echo 'Aguardando Elasticsearch subir...';
+          sleep 5;
+        done;
+        curl -u $${ELASTIC_USERNAME}:$${ELASTIC_PASSWORD} -X PUT http://elasticsearch_service:9200/seu_indice -H 'Content-Type: application/json' -d '
+        {
+          "aliases": {},
+          "mappings": {
+            "properties": {
+              "_class": { "type": "text", "fields": { "keyword": { "type": "keyword", "ignore_above": 256 }}},
+              "article": { "type": "text", "fields": { "keyword": { "type": "keyword", "ignore_above": 256 }}},
+              "createdDate": { "type": "date", "format": "yyyy-MM-dd'T'HH:mm:ss" },
+              "id": { "type": "text", "fields": { "keyword": { "type": "keyword", "ignore_above": 256 }}},
+              "source": { "type": "text", "fields": { "keyword": { "type": "keyword", "ignore_above": 256 }}},
+              "synonyms": { "type": "keyword" },
+              "title": { "type": "text", "fields": { "keyword": { "type": "keyword", "ignore_above": 256 }}},
+              "updatedDate": { "type": "date", "format": "yyyy-MM-dd'T'HH:mm:ss" }
+            }
+          },
+          "settings": {
+            "index": {
+              "routing": {
+                "allocation": {
+                  "include": { "_tier_preference": "data_content" }
+                }
+              },
+              "number_of_shards": 1,
+              "number_of_replicas": 1
+            }
+          }
+        }'
+    networks:
+      - graphpedia-network
+    depends_on:
+      - elasticsearch
 
 volumes:
   neo4j_data:
   es_data:
 
 networks:
-  spring_network:
+  graphpedia-network:
     driver: bridge
     external: true

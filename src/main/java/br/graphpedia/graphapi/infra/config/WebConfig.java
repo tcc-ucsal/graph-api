@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(needForContextInterceptor)
-                .addPathPatterns("/term/create");
+                .addPathPatterns("/term/{term}");
     }
 
     @Override
