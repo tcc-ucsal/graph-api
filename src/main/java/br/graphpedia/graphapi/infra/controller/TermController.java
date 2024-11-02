@@ -7,7 +7,7 @@ import br.graphpedia.graphapi.infra.controller.mapper.TermContextResponseMapper;
 import br.graphpedia.graphapi.infra.controller.mapper.TermResponseMapper;
 import br.graphpedia.graphapi.infra.controller.responses.TermContextResponse;
 import br.graphpedia.graphapi.infra.controller.responses.TermResponse;
-import br.graphpedia.graphapi.infra.tools.NodePositionTools;
+import br.graphpedia.graphapi.infra.database.neo4j.tools.NodePositionTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

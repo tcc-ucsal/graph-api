@@ -35,16 +35,16 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
         validateTerm(term);
         try {
             String cypher = """
-            MERGE (termC:Term {title: $term.title})
+            MERGE (termC:Term {title: toLower($term.title)})
             ON CREATE SET\s
-                termC.title = $term.title,
+                termC.title = toLower($term.title),
                 termC.createdDate = timestamp()
             ON MATCH SET
                 termC.source = $term.source,
                 termC.updatedDate = timestamp()
             WITH termC
             UNWIND $term.connectionWiths AS connection
-            MERGE (targetTerm:Term {title: connection.targetTerm.title})
+            MERGE (targetTerm:Term {title: toLower(connection.targetTerm.title)})
             MERGE (termC)-[c:CONNECTION_WITH {relevance_level: connection.relevanceLevel}]->(targetTerm)
             ON CREATE SET
                 c.relevance_level = connection.relevanceLevel

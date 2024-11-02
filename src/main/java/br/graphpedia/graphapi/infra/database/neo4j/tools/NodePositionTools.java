@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.infra.tools;
+package br.graphpedia.graphapi.infra.database.neo4j.tools;
 
 import br.graphpedia.graphapi.infra.controller.responses.ConnectionWithResponse;
 import br.graphpedia.graphapi.infra.controller.responses.Coordinates;
@@ -26,7 +26,12 @@ public class NodePositionTools {
     private static <T extends ConnectionWithResponse> Coordinates preOrderHelper(Set<T> vertexConnections, int layer, double minA, double maxA) {
         double angle = (minA + maxA) / 2;
         double distance = 100.0 * layer;
-        updateBounds(layer, angle, minA, maxA);
+
+        if (layer > 0) {
+            double arc = Math.acos(layer / (layer + 1.0));
+            minA = Math.max(minA, (angle - arc));
+            maxA = Math.min(maxA, (angle + arc));
+        }
 
         double left = minA;
         if (vertexConnections != null) {
@@ -35,7 +40,7 @@ public class NodePositionTools {
                 double portion = calculatePortion(childTerm.getConnectionWiths(), vertexConnections);
                 double right = left + (portion * (maxA - minA));
 
-                preOrder(childTerm, layer + 1, left, right);
+                preOrder(childTerm, (layer + 1), left, right);
 
                 left = right;
             }
@@ -56,16 +61,7 @@ public class NodePositionTools {
         double childSize = getConnectionsSize(childTermConn);
         double vertexSize = getConnectionsSize(vertexConn);
 
-        return vertexSize > 1 ? childSize / (vertexSize - 1.0) : 0;
-    }
-
-    private static void updateBounds(int layer, double angle, double minA, double maxA) {
-
-        if (layer > 0) {
-            double arc = Math.acos(layer / (layer + 1.0));
-            minA = Math.max(minA, angle - arc);
-            maxA = Math.min(maxA, angle + arc);
-        }
+        return vertexSize > 1 ? (childSize / (vertexSize - 1.0)) : 0;
     }
 
     private static double getConnectionsSize(Set<? extends ConnectionWithResponse> connectionWiths) {
