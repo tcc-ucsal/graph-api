@@ -65,7 +65,7 @@ public class NodePositionTools {
     }
 
     private static double getConnectionsSize(Set<? extends ConnectionWithResponse> connectionWiths) {
-        return connectionWiths != null ? connectionWiths.size() : 1;
+        return connectionWiths != null ? (connectionWiths.size() + 1) : 1;
     }
 
 }
