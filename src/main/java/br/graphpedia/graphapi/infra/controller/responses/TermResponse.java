@@ -1,7 +1,5 @@
 package br.graphpedia.graphapi.infra.controller.responses;
 
-import br.graphpedia.graphapi.core.entity.ConnectionWith;
-import br.graphpedia.graphapi.core.entity.TermContext;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

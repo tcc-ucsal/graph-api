@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.infra.utils;
+package br.graphpedia.graphapi.infra.database.neo4j.tools;
 
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;

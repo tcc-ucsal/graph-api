@@ -3,8 +3,10 @@ package br.graphpedia.graphapi.infra.controller;
 import br.graphpedia.graphapi.core.entity.TermContext;
 import br.graphpedia.graphapi.core.usecase.GetGraphUseCase;
 import br.graphpedia.graphapi.core.usecase.GetTermContextUseCase;
+import br.graphpedia.graphapi.infra.controller.mapper.FlatTermResponseMapper;
 import br.graphpedia.graphapi.infra.controller.mapper.TermContextResponseMapper;
 import br.graphpedia.graphapi.infra.controller.mapper.TermResponseMapper;
+import br.graphpedia.graphapi.infra.controller.responses.FlatTermResponse;
 import br.graphpedia.graphapi.infra.controller.responses.TermContextResponse;
 import br.graphpedia.graphapi.infra.controller.responses.TermResponse;
 import br.graphpedia.graphapi.infra.database.neo4j.tools.NodePositionTools;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -33,6 +36,20 @@ public class TermController {
     public TermController(GetGraphUseCase getGraphUseCase, GetTermContextUseCase getTermContextUseCase) {
         this.getGraphUseCase = getGraphUseCase;
         this.getTermContextUseCase = getTermContextUseCase;
+    }
+
+    @Operation(summary = "Get Search Result as flat list")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = FlatTermResponse.class)) }),
+            @ApiResponse(responseCode = "500", description = "Persistence Error",
+                    content = @Content)})
+    @GetMapping("/flat/{term}")
+    public ResponseEntity<List<FlatTermResponse>> getFlatGraph(@PathVariable String term){
+        List<FlatTermResponse> root = FlatTermResponseMapper.INSTANCE.toResponse(getGraphUseCase.execute(term));
+        //NodePositionTools.radialTreeLayout(root);
+        return ResponseEntity.ok().body(root);
     }
 
     @Operation(summary = "Get Search Result")
