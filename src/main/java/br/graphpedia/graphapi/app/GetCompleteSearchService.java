@@ -1,7 +1,7 @@
 package br.graphpedia.graphapi.app;
 
 import br.graphpedia.graphapi.app.dto.CompleteTermSearchDTO;
-import br.graphpedia.graphapi.app.interfaces.GetCompleteTermExternalService;
+import br.graphpedia.graphapi.app.abstractions.GetCompleteTermExternalService;
 import br.graphpedia.graphapi.app.mapper.ConnectionWithMapper;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;

@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.app.interfaces;
+package br.graphpedia.graphapi.app.abstractions;
 
 import java.util.List;
 

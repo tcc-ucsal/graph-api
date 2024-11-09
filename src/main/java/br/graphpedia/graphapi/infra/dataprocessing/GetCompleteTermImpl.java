@@ -1,7 +1,7 @@
 package br.graphpedia.graphapi.infra.dataprocessing;
 
 import br.graphpedia.graphapi.app.dto.CompleteTermSearchDTO;
-import br.graphpedia.graphapi.app.interfaces.GetCompleteTermExternalService;
+import br.graphpedia.graphapi.app.abstractions.GetCompleteTermExternalService;
 import br.graphpedia.graphapi.core.exceptions.ExternalApiException;
 import br.graphpedia.graphapi.infra.dataprocessing.dto.GetTermDataProcessingApiResponse;
 import br.graphpedia.graphapi.infra.dataprocessing.mapper.GetTermDataProcessingApiResponseMapper;
