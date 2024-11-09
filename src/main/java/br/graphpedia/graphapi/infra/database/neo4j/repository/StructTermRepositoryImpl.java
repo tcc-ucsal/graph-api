@@ -6,6 +6,7 @@ import br.graphpedia.graphapi.app.dto.ConnectionWithCountDTO;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.exceptions.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
+import br.graphpedia.graphapi.core.usecase.GetGraphUseCase;
 import br.graphpedia.graphapi.infra.database.neo4j.entity.TermEntity;
 import br.graphpedia.graphapi.infra.database.neo4j.tools.Neo4jObjectConverter;
 import org.neo4j.driver.Value;
@@ -86,10 +87,12 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
             OPTIONAL MATCH (target)-[c:CONNECTION_WITH {relevance_level: 1}]->(other)
             WITH target, r, COUNT(other) as connectionCount
             RETURN target, r, connectionCount
+            LIMIT $maxNode
             """;
 
         return neo4jClient.query(query)
                 .bind(title).to("termTitle")
+                .bind(GetGraphUseCase.MAX_SCREEN_NODES).to("maxNode")
                 .fetchAs(ConnectionWithCountDTO.class)
                 .mappedBy((typeSystem, register) -> {
                     Term targetTerm = new Term();

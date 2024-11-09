@@ -18,7 +18,6 @@ import java.util.*;
 @Service
 public class GetGraphService implements GetGraphUseCase {
 
-    private static final int MAX_SCREEN_NODES = 30;
     private final IStructTermRepository structTermRepository;
 
     private final IContextTermRepository contextTermRepository;
