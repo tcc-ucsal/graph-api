@@ -51,8 +51,10 @@ public class TermController {
                     content = @Content)})
     @GetMapping("/flat/{term}")
     public ResponseEntity<List<FlatTermResponse>> getFlatGraph(@PathVariable String term){
-        List<FlatTermResponse> root = FlatTermResponseMapper.INSTANCE.toResponse(getGraphUseCase.execute(term));
-        //NodePositionTools.radialTreeLayout(root);
+        Term rootEntity =getGraphUseCase.execute(term);
+        Map<String, Coordinates> coordinatesMap =
+                LayoutProcessor.applyLayout(new RadialLayoutProcessor(), rootEntity);
+        List<FlatTermResponse> root = FlatTermResponseMapper.INSTANCE.toResponseWithCoordinates(rootEntity, coordinatesMap);
         return ResponseEntity.ok().body(root);
     }
 
