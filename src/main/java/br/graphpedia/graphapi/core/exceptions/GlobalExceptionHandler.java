@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({IllegalAccessError.class})
+    @ExceptionHandler({IllegalAccessError.class, IllegalArgumentException.class})
     public ResponseEntity<Object> handleBadRequestException(
             PersistenceException ex, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(
@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-   // @ExceptionHandler({ExternalApiException.class})
+    @ExceptionHandler({ExternalApiException.class})
     public ResponseEntity<Object> handleExternalApiException(
             PersistenceException ex, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(

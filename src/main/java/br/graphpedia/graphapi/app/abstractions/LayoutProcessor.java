@@ -1,21 +1,12 @@
 package br.graphpedia.graphapi.app.abstractions;
 
-public abstract class LayoutProcessor<T> {
 
-    public static final double TWO_PI = 2 * Math.PI;
-    public static final double BASE_DISTANCE = 100.0;
+public abstract class LayoutProcessor<R, T> {
 
-    public static <T> void applyLayout(LayoutProcessor<T> processor, T root) {
-        processor.preProcess(root);
-        processor.processLayout(root);
-        processor.postProcess(root);
+    public static <R, T> R applyLayout(LayoutProcessor<R, T> processor, T root) {
+        R result = processor.processLayout(root);
+        return result;
     }
-    protected void preProcess(T root) {
-    }
-
-    public abstract void processLayout(T root);
-
-    protected void postProcess(T root) {
-    }
+    public abstract R processLayout(T root);
 
 }

@@ -1,17 +1,18 @@
 package br.graphpedia.graphapi.infra.controller;
 
 import br.graphpedia.graphapi.app.abstractions.LayoutProcessor;
+import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;
 import br.graphpedia.graphapi.core.usecase.GetGraphUseCase;
 import br.graphpedia.graphapi.core.usecase.GetTermContextUseCase;
 import br.graphpedia.graphapi.infra.controller.mapper.FlatTermResponseMapper;
 import br.graphpedia.graphapi.infra.controller.mapper.TermContextResponseMapper;
 import br.graphpedia.graphapi.infra.controller.mapper.TermResponseMapper;
+import br.graphpedia.graphapi.infra.controller.responses.Coordinates;
 import br.graphpedia.graphapi.infra.controller.responses.FlatTermResponse;
 import br.graphpedia.graphapi.infra.controller.responses.TermContextResponse;
 import br.graphpedia.graphapi.infra.controller.responses.TermResponse;
-import br.graphpedia.graphapi.infra.controller.tools.NodePositionTools;
-import br.graphpedia.graphapi.infra.controller.tools.RadialLayoutProcessor;
+import br.graphpedia.graphapi.infra.controller.layout.RadialLayoutProcessor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -63,8 +65,11 @@ public class TermController {
                     content = @Content)})
     @GetMapping("/{term}")
     public ResponseEntity<TermResponse> getGraph(@PathVariable String term){
-        TermResponse root = TermResponseMapper.INSTANCE.toResponse(getGraphUseCase.execute(term));
-        LayoutProcessor.applyLayout(new RadialLayoutProcessor(), root);
+        Term rootEntity = getGraphUseCase.execute(term);
+        Map<String, Coordinates> coordinatesMap =
+                LayoutProcessor.applyLayout(new RadialLayoutProcessor(), rootEntity);
+        TermResponse root = TermResponseMapper.INSTANCE.toResponseWithCoordinates(rootEntity, coordinatesMap);
+
         return ResponseEntity.ok().body(root);
     }
 
