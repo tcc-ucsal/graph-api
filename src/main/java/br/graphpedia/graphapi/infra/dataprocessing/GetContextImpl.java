@@ -1,10 +1,11 @@
 package br.graphpedia.graphapi.infra.dataprocessing;
 
-import br.graphpedia.graphapi.app.dto.CompleteTermSearchDTO;
-import br.graphpedia.graphapi.app.abstractions.GetCompleteTermExternalService;
+import br.graphpedia.graphapi.app.abstractions.GetContextExternalService;
+import br.graphpedia.graphapi.app.dto.TermContextDTO;
+import br.graphpedia.graphapi.core.entity.TermContext;
 import br.graphpedia.graphapi.core.exceptions.ExternalApiException;
 import br.graphpedia.graphapi.infra.dataprocessing.dto.GetTermDPResponse;
-import br.graphpedia.graphapi.infra.dataprocessing.mapper.GetTermDataProcessingApiResponseMapper;
+import br.graphpedia.graphapi.infra.dataprocessing.mapper.GetContextDataProcessingApiResponseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -14,21 +15,23 @@ import org.springframework.web.client.RestTemplate;
 import static br.graphpedia.graphapi.infra.dataprocessing.DataProcessingUtils.getUrl;
 
 @Component
-public class GetCompleteTermImpl implements GetCompleteTermExternalService {
+public class GetContextImpl implements GetContextExternalService {
+
     private final RestTemplate restTemplate;
 
     @Autowired
-    public GetCompleteTermImpl(RestTemplate restTemplate) {
+    public GetContextImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
+
     @Override
-    public CompleteTermSearchDTO execute(String term) {
-        try {
-            GetTermDPResponse data = restTemplate.getForObject(getUrl("/highlight/" + term), GetTermDPResponse.class);
+    public TermContext execute(String term) {
+        try{
+            GetTermDPResponse response = restTemplate.getForObject(getUrl("/full_text/" + term), GetTermDPResponse.class);
 
-            return GetTermDataProcessingApiResponseMapper.INSTANCE.toCompleteTermSearchDTO(data);
+            return GetContextDataProcessingApiResponseMapper.INSTANCE.toTermContextDTO(response);
 
-        } catch (HttpClientErrorException | HttpServerErrorException e ) {
+        }catch (HttpClientErrorException | HttpServerErrorException e ) {
             throw new ExternalApiException("Data-processing-error: " + e.getStatusCode() + " - " + e.getMessage(), e);
 
         } catch (Exception e) {

@@ -32,6 +32,9 @@ public class TermContextEntity {
     @Field(type = FieldType.Text)
     private String source;
 
+    @Field(type = FieldType.Boolean)
+    private boolean searched;
+
     @Field(type = FieldType.Date, format = {}, pattern = "uuuu-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdDate;
 

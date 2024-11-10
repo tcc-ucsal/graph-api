@@ -25,8 +25,8 @@ public class GetCompleteSearchService implements GetCompleteSearchUseCase {
     public Term execute(String term) {
         CompleteTermSearchDTO result = getCompleteTermExternalService.execute(term);
 
-        Term termResponse = new Term(result.searched_term());
-        TermContext context = new TermContext(result.searched_term(), result.article(), result.source());
+        Term termResponse = new Term(result.searchedTerm());
+        TermContext context = new TermContext(result.searchedTerm(), result.article(), result.source());
 
         termResponse.setConnectionWiths(Set.copyOf(ConnectionWithMapper.INSTANCE.convertSimpleConnectionWithDTOtoCore(result.connections())));
         termResponse.setContext(context);

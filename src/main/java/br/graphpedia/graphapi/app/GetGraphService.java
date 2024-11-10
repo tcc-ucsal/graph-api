@@ -33,8 +33,14 @@ public class GetGraphService implements GetGraphUseCase {
 
     @Override
     public Term execute(String term) {
-        Optional<Term> optTerm = getExistingGraph(term);
-        if (optTerm.isPresent()) return optTerm.get();
+
+        Optional<TermContext> termContext = contextTermRepository.findByTitleOrSynonyms(term);
+
+        if(termContext.isPresent() && termContext.get().isSearched()) {
+            Optional<Term> optTerm = getExistingGraph(term, termContext.get());
+
+            if (optTerm.isPresent()) return optTerm.get();
+        }
 
         Term graph;
         graph = getCompleteSearchUseCase.execute(term);
@@ -44,12 +50,23 @@ public class GetGraphService implements GetGraphUseCase {
         }
 
         try{
-            TermContext createdContext = contextTermRepository.save(graph.getContext());
+            TermContext context = graph.getContext();
+            if(termContext.isPresent()){
+                context.setCreatedDate(termContext.get().getCreatedDate());
+                context.setId(termContext.get().getId());
+            }
+            context.setSearched(true);
+            TermContext createdContext = contextTermRepository.save(context);
+
             structTermRepository.create(graph);
             graph.setContext(createdContext);
 
         }catch (Exception exception){
-            contextTermRepository.deleteByTitle(graph.getTitle());
+            if(termContext.isEmpty()){
+                contextTermRepository.deleteByTitle(graph.getTitle());
+            }else{
+                contextTermRepository.save(termContext.get());
+            }
             structTermRepository.deleteByTitleIfNotIncomingConnections(graph.getTitle());
             throw new PersistenceException("Error on save graph", exception);
         }
@@ -57,16 +74,12 @@ public class GetGraphService implements GetGraphUseCase {
         return graph;
     }
 
-    private Optional<Term> getExistingGraph(String term) {
-        Optional<TermContext> termContext = contextTermRepository.findByTitleOrSynonyms(term);
+    private Optional<Term> getExistingGraph(String term, TermContext termContext) {
+        Term graph = new Term(termContext.getTitle());
+        graph.setConnectionWiths(getMaxTermsOnScreen(term));
+        graph.setContext(termContext);
+        return Optional.of(graph);
 
-        if(termContext.isPresent()){
-            Term graph = new Term(termContext.get().getTitle());
-            graph.setConnectionWiths(getMaxTermsOnScreen(term));
-            graph.setContext(termContext.get());
-            return Optional.of(graph);
-        }
-        return Optional.empty();
     }
 
     private Set<ConnectionWith> getMaxTermsOnScreen(String term) {

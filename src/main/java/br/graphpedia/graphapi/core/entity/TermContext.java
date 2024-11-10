@@ -19,6 +19,7 @@ public class TermContext {
     private String title;
     private String article;
     private String source;
+    private boolean searched;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private List<String> synonyms;

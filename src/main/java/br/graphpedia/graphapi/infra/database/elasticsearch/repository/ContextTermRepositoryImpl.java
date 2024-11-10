@@ -30,7 +30,13 @@ public class ContextTermRepositoryImpl implements IContextTermRepository {
     @Override
     public TermContext save(TermContext context) {
         TermContextEntity entity = TermContextElasticMapper.INSTANCE.toEntity(context);
-        entity.setCreatedDate(LocalDateTime.now());
+
+        if(context.getCreatedDate() != null){
+            entity.setUpdatedDate(LocalDateTime.now());
+        }else{
+            entity.setCreatedDate(LocalDateTime.now());
+        }
+
         return TermContextElasticMapper.INSTANCE.toTermContextCore(elasticsearchContextTermRepository.save(entity));
     }
 

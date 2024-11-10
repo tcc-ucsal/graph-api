@@ -19,7 +19,8 @@ public interface TermContextElasticMapper {
             @Mapping(source = "source", target = "source"),
             @Mapping(source = "createdDate", target = "createdDate"),
             @Mapping(source = "updatedDate", target = "updatedDate"),
-            @Mapping(source = "synonyms", target = "synonyms")
+            @Mapping(source = "synonyms", target = "synonyms"),
+            @Mapping(source = "searched", target = "searched")
     })
     TermContext toTermContextCore(TermContextEntity entity);
 
@@ -30,7 +31,8 @@ public interface TermContextElasticMapper {
             @Mapping(source = "source", target = "source"),
             @Mapping(source = "createdDate", target = "createdDate"),
             @Mapping(source = "updatedDate", target = "updatedDate"),
-            @Mapping(source = "synonyms", target = "synonyms")
+            @Mapping(source = "synonyms", target = "synonyms"),
+            @Mapping(source = "searched", target = "searched")
     })
     TermContextEntity toEntity(TermContext dto);
 }

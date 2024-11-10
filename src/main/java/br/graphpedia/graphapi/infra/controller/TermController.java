@@ -86,7 +86,7 @@ public class TermController {
                     content = @Content)
 })
     @GetMapping("/context/{term}")
-    public ResponseEntity<TermContextResponse> getContext(@PathVariable @NotNull @NotEmpty String term){
+    public ResponseEntity<TermContextResponse> getContext(@PathVariable String term){
         Optional<TermContext> termContext = getTermContextUseCase.getByTitle(term);
         return termContext.map(context ->
                         ResponseEntity.ok().body(TermContextResponseMapper.INSTANCE.toResponse(context)))

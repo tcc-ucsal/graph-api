@@ -8,8 +8,7 @@ import br.graphpedia.graphapi.core.exceptions.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.IContextTermRepository;
 import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
 import br.graphpedia.graphapi.core.usecase.test.TestPopulationUseCase;
-import br.graphpedia.graphapi.infra.dataprocessing.dto.GetTermDataProcessingApiResponse;
-import br.graphpedia.graphapi.infra.dataprocessing.dto.SearchOptionsDataProcessingApiResponse;
+import br.graphpedia.graphapi.infra.dataprocessing.dto.GetTermDPResponse;
 import br.graphpedia.graphapi.infra.dataprocessing.mapper.GetTermDataProcessingApiResponseMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,11 +69,11 @@ public class TestPopulationService implements TestPopulationUseCase {
 
         CompleteTermSearchDTO result = GetTermDataProcessingApiResponseMapper.INSTANCE
                 .toCompleteTermSearchDTO(objectMapper.readValue(new File(PATH_MOCKS + mockFile),
-                        GetTermDataProcessingApiResponse.class));
+                        GetTermDPResponse.class));
 
-        graph.setTitle(result.searched_term());
+        graph.setTitle(result.searchedTerm());
         graph.setConnectionWiths(Set.copyOf(ConnectionWithMapper.INSTANCE.convertSimpleConnectionWithDTOtoCore(result.connections())));
-        graph.setContext(new TermContext(result.searched_term(), result.article(), result.source()));
+        graph.setContext(new TermContext(result.searchedTerm(), result.article(), result.source()));
     }
 
     @Override

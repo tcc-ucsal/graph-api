@@ -1,5 +1,7 @@
 package br.graphpedia.graphapi.app;
 
+import br.graphpedia.graphapi.app.abstractions.GetContextExternalService;
+import br.graphpedia.graphapi.app.dto.TermContextDTO;
 import br.graphpedia.graphapi.core.entity.TermContext;
 import br.graphpedia.graphapi.core.persistence.IContextTermRepository;
 import br.graphpedia.graphapi.core.usecase.GetTermContextUseCase;
@@ -12,14 +14,27 @@ import java.util.Optional;
 public class GetTermContextService implements GetTermContextUseCase {
 
     private final IContextTermRepository contextTermRepository;
+    private final GetContextExternalService getContextExternalService;
 
     @Autowired
-    public GetTermContextService(IContextTermRepository contextTermRepository) {
+    public GetTermContextService(IContextTermRepository contextTermRepository, GetContextExternalService getContextExternalService) {
         this.contextTermRepository = contextTermRepository;
+        this.getContextExternalService = getContextExternalService;
     }
 
     @Override
     public Optional<TermContext> getByTitle(String term) {
-        return contextTermRepository.findByTitleOrSynonyms(term);
+        Optional<TermContext> result = contextTermRepository.findByTitleOrSynonyms(term);
+
+        if(result.isEmpty()){
+            result = Optional.ofNullable(getContextExternalService.execute(term));
+            if(result.isPresent()){
+                TermContext context = result.get();
+                context.setSearched(false);
+                contextTermRepository.save(context);
+            }
+        }
+
+        return result;
     }
 }

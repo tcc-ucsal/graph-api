@@ -41,7 +41,6 @@ public class StructTermRepositoryImpl implements IStructTermRepository {
                 termC.title = toLower($term.title),
                 termC.createdDate = timestamp()
             ON MATCH SET
-                termC.source = $term.source,
                 termC.updatedDate = timestamp()
             WITH termC
             UNWIND $term.connectionWiths AS connection
