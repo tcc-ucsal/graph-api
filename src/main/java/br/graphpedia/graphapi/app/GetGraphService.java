@@ -50,6 +50,8 @@ public class GetGraphService implements GetGraphUseCase {
         }
 
         try{
+            structTermRepository.create(graph);
+
             TermContext context = graph.getContext();
             if(termContext.isPresent()){
                 context.setCreatedDate(termContext.get().getCreatedDate());
@@ -58,7 +60,6 @@ public class GetGraphService implements GetGraphUseCase {
             context.setSearched(true);
             TermContext createdContext = contextTermRepository.save(context);
 
-            structTermRepository.create(graph);
             graph.setContext(createdContext);
 
         }catch (Exception exception){
