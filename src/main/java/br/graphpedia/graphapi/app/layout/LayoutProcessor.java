@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.app.abstractions;
+package br.graphpedia.graphapi.app.layout;
 
 
 public abstract class LayoutProcessor<R, T> {

@@ -1,6 +1,6 @@
 package br.graphpedia.graphapi.infra.controller;
 
-import br.graphpedia.graphapi.app.abstractions.LayoutProcessor;
+import br.graphpedia.graphapi.app.layout.LayoutProcessor;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;
 import br.graphpedia.graphapi.core.usecase.GetGraphUseCase;
@@ -12,14 +12,12 @@ import br.graphpedia.graphapi.infra.controller.responses.Coordinates;
 import br.graphpedia.graphapi.infra.controller.responses.FlatTermResponse;
 import br.graphpedia.graphapi.infra.controller.responses.TermContextResponse;
 import br.graphpedia.graphapi.infra.controller.responses.TermResponse;
-import br.graphpedia.graphapi.infra.controller.layout.RadialLayoutProcessor;
+import br.graphpedia.graphapi.app.layout.RadialLayoutProcessor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,5 @@
-package br.graphpedia.graphapi.infra.controller.layout;
+package br.graphpedia.graphapi.app.layout;
 
-import br.graphpedia.graphapi.app.abstractions.LayoutProcessor;
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.infra.controller.responses.Coordinates;
