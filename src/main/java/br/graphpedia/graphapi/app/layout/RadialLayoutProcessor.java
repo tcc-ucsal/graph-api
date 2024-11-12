@@ -2,7 +2,7 @@ package br.graphpedia.graphapi.app.layout;
 
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
 import br.graphpedia.graphapi.core.entity.Term;
-import br.graphpedia.graphapi.infra.controller.responses.Coordinates;
+import br.graphpedia.graphapi.infra.controller.response.Coordinates;
 
 import java.util.HashMap;
 import java.util.Map;

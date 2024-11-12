@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.app;
+package br.graphpedia.graphapi.app.services;
 
 import br.graphpedia.graphapi.app.abstractions.GetSearchOptionsExternalService;
 import br.graphpedia.graphapi.core.usecase.VerifyNeedForContextUseCase;

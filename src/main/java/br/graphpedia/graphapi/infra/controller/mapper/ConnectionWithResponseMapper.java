@@ -1,8 +1,8 @@
 package br.graphpedia.graphapi.infra.controller.mapper;
 
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
-import br.graphpedia.graphapi.infra.controller.responses.ConnectionWithResponse;
-import br.graphpedia.graphapi.infra.controller.responses.Coordinates;
+import br.graphpedia.graphapi.infra.controller.response.ConnectionWithResponse;
+import br.graphpedia.graphapi.infra.controller.response.Coordinates;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

@@ -1,11 +1,11 @@
-package br.graphpedia.graphapi.app;
+package br.graphpedia.graphapi.app.services;
 
 import br.graphpedia.graphapi.app.dto.ConnectionWithCountDTO;
 import br.graphpedia.graphapi.app.mapper.ConnectionWithMapper;
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;
-import br.graphpedia.graphapi.core.exceptions.PersistenceException;
+import br.graphpedia.graphapi.app.exceptions.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.IContextTermRepository;
 import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
 import br.graphpedia.graphapi.core.usecase.GetCompleteSearchUseCase;

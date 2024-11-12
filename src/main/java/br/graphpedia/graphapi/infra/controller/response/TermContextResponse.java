@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.infra.controller.responses;
+package br.graphpedia.graphapi.infra.controller.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

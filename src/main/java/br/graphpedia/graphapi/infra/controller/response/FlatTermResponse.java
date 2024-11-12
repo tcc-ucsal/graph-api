@@ -1,9 +1,6 @@
-package br.graphpedia.graphapi.infra.controller.responses;
+package br.graphpedia.graphapi.infra.controller.response;
 
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter

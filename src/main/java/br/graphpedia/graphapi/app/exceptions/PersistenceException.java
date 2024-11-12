@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.core.exceptions;
+package br.graphpedia.graphapi.app.exceptions;
 
 public class PersistenceException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.infra.dataprocessing;
+package br.graphpedia.graphapi.infra.dataprocessing.tools;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ public class DataProcessingUtils {
         DATA_PROCESSING_URL = url;
     }
 
-    protected static String getUrl(String endpoint){
+    public static String getUrl(String endpoint){
         return UriComponentsBuilder.fromHttpUrl(DATA_PROCESSING_URL)
                 .path(endpoint)
                 .toUriString();

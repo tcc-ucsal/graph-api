@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.infra.dataprocessing;
+package br.graphpedia.graphapi.infra.dataprocessing.impl;
 
 import br.graphpedia.graphapi.app.abstractions.GetSearchOptionsExternalService;
 import br.graphpedia.graphapi.infra.dataprocessing.dto.SearchOptionsDataProcessingApiResponse;
@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Objects;
 
-import static br.graphpedia.graphapi.infra.dataprocessing.DataProcessingUtils.getUrl;
+import static br.graphpedia.graphapi.infra.dataprocessing.tools.DataProcessingUtils.getUrl;
 
 @Component
 public class GetSearchOptionsImpl implements GetSearchOptionsExternalService {

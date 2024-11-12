@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.core.exceptions;
+package br.graphpedia.graphapi.app.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,26 +12,23 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({PersistenceException.class})
-    public ResponseEntity<Object> handlePersistenceException(
-            PersistenceException ex, WebRequest request) {
+    public ResponseEntity<Object> handlePersistenceException(PersistenceException ex, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), ex.getCause(), LocalDateTime.now());
+                HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), LocalDateTime.now());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler({IllegalAccessError.class, IllegalArgumentException.class})
-    public ResponseEntity<Object> handleBadRequestException(
-            PersistenceException ex, WebRequest request) {
+    public ResponseEntity<Object> handleBadRequestException(PersistenceException ex, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(), ex.getMessage(), ex.getCause(), LocalDateTime.now());
+                HttpStatus.BAD_REQUEST.value(), ex.getMessage(), LocalDateTime.now());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({ExternalApiException.class})
-    public ResponseEntity<Object> handleExternalApiException(
-            PersistenceException ex, WebRequest request) {
+    public ResponseEntity<Object> handleExternalApiException(PersistenceException ex, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.SERVICE_UNAVAILABLE.value(), ex.getMessage(), ex.getCause(), LocalDateTime.now());
+                HttpStatus.SERVICE_UNAVAILABLE.value(), ex.getMessage(), LocalDateTime.now());
         return new ResponseEntity<>(errorResponse, HttpStatus.SERVICE_UNAVAILABLE);
     }
 }

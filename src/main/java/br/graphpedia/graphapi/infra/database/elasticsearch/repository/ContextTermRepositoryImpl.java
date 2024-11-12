@@ -1,7 +1,7 @@
 package br.graphpedia.graphapi.infra.database.elasticsearch.repository;
 
 import br.graphpedia.graphapi.core.entity.TermContext;
-import br.graphpedia.graphapi.core.exceptions.PersistenceException;
+import br.graphpedia.graphapi.app.exceptions.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.IContextTermRepository;
 import br.graphpedia.graphapi.infra.database.elasticsearch.entity.TermContextEntity;
 import br.graphpedia.graphapi.infra.database.elasticsearch.mapper.TermContextElasticMapper;

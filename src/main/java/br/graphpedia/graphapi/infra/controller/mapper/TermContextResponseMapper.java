@@ -1,7 +1,7 @@
 package br.graphpedia.graphapi.infra.controller.mapper;
 
 import br.graphpedia.graphapi.core.entity.TermContext;
-import br.graphpedia.graphapi.infra.controller.responses.TermContextResponse;
+import br.graphpedia.graphapi.infra.controller.response.TermContextResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

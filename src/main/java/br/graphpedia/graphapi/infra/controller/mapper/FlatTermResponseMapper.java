@@ -2,17 +2,15 @@ package br.graphpedia.graphapi.infra.controller.mapper;
 
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
 import br.graphpedia.graphapi.core.entity.Term;
-import br.graphpedia.graphapi.infra.controller.responses.Coordinates;
-import br.graphpedia.graphapi.infra.controller.responses.FlatTermResponse;
+import br.graphpedia.graphapi.infra.controller.response.Coordinates;
+import br.graphpedia.graphapi.infra.controller.response.FlatTermResponse;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Mapper
