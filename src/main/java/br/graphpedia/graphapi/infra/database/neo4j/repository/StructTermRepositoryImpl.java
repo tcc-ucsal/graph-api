@@ -4,7 +4,7 @@ import br.graphpedia.graphapi.app.dto.ConnectionWithDTO;
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
 import br.graphpedia.graphapi.app.dto.ConnectionWithCountDTO;
 import br.graphpedia.graphapi.core.entity.Term;
-import br.graphpedia.graphapi.app.exceptions.PersistenceException;
+import br.graphpedia.graphapi.core.exceptions.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
 import br.graphpedia.graphapi.core.usecase.GetGraphUseCase;
 import br.graphpedia.graphapi.infra.database.neo4j.entity.TermEntity;

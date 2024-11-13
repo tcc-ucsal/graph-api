@@ -1,6 +1,6 @@
 package br.graphpedia.graphapi.infra.controller;
 
-import br.graphpedia.graphapi.app.layout.LayoutProcessor;
+import br.graphpedia.graphapi.app.interfaces.LayoutProcessor;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;
 import br.graphpedia.graphapi.core.usecase.GetGraphUseCase;
@@ -12,7 +12,7 @@ import br.graphpedia.graphapi.infra.controller.response.Coordinates;
 import br.graphpedia.graphapi.infra.controller.response.FlatTermResponse;
 import br.graphpedia.graphapi.infra.controller.response.TermContextResponse;
 import br.graphpedia.graphapi.infra.controller.response.TermResponse;
-import br.graphpedia.graphapi.app.layout.RadialLayoutProcessor;
+import br.graphpedia.graphapi.infra.controller.layout.RadialLayoutProcessor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

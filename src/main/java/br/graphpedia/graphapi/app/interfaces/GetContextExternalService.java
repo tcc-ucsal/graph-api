@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.app.abstractions;
+package br.graphpedia.graphapi.app.interfaces;
 
 
 import br.graphpedia.graphapi.core.entity.TermContext;

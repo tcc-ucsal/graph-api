@@ -1,8 +1,8 @@
 package br.graphpedia.graphapi.infra.dataprocessing.impl;
 
-import br.graphpedia.graphapi.app.abstractions.GetContextExternalService;
+import br.graphpedia.graphapi.app.interfaces.GetContextExternalService;
 import br.graphpedia.graphapi.core.entity.TermContext;
-import br.graphpedia.graphapi.app.exceptions.ExternalApiException;
+import br.graphpedia.graphapi.core.exceptions.ExternalApiException;
 import br.graphpedia.graphapi.infra.dataprocessing.dto.GetTermDPResponse;
 import br.graphpedia.graphapi.infra.dataprocessing.mapper.GetContextDataProcessingApiResponseMapper;
 import org.springframework.beans.factory.annotation.Autowired;

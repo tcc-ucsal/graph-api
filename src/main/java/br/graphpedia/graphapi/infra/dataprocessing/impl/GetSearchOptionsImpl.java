@@ -1,6 +1,6 @@
 package br.graphpedia.graphapi.infra.dataprocessing.impl;
 
-import br.graphpedia.graphapi.app.abstractions.GetSearchOptionsExternalService;
+import br.graphpedia.graphapi.app.interfaces.GetSearchOptionsExternalService;
 import br.graphpedia.graphapi.infra.dataprocessing.dto.SearchOptionsDataProcessingApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

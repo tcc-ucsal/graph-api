@@ -1,4 +1,4 @@
-package br.graphpedia.graphapi.app.exceptions;
+package br.graphpedia.graphapi.core.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

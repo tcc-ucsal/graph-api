@@ -1,7 +1,6 @@
 package br.graphpedia.graphapi.app.services;
 
-import br.graphpedia.graphapi.app.abstractions.GetContextExternalService;
-import br.graphpedia.graphapi.app.dto.TermContextDTO;
+import br.graphpedia.graphapi.app.interfaces.GetContextExternalService;
 import br.graphpedia.graphapi.core.entity.TermContext;
 import br.graphpedia.graphapi.core.persistence.IContextTermRepository;
 import br.graphpedia.graphapi.core.usecase.GetTermContextUseCase;
