@@ -1,25 +1,8 @@
 version: '0.1.0'
 
 services:
-  graph-api:
-    build: .
-    image: graph-api
-    container_name: graph_api_app
-    command: java -jar -Dspring.profiles.active=dev /app/graph-api.jar
-    ports:
-      - "8080:8080"
-    env_file: ".env"
-    depends_on:
-      - neo4j
-      - elasticsearch
-    links:
-      - neo4j
-      - elasticsearch
-    networks:
-      - graphpedia-network
-
   neo4j:
-    image: neo4j:5.12.0
+    image: neo4j:5.13
     container_name: neo4j_db
     ports:
       - "7474:7474"
@@ -52,39 +35,95 @@ services:
     environment:
       - ELASTIC_USERNAME=${ELASTIC_USERNAME}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-    command:
-      - |
-        until curl -u $${ELASTIC_USERNAME}:$${ELASTIC_PASSWORD} -s http://elasticsearch_service:9200; do
-          echo 'Aguardando Elasticsearch subir...';
-          sleep 5;
-        done;
-        curl -u $${ELASTIC_USERNAME}:$${ELASTIC_PASSWORD} -X PUT http://elasticsearch_service:9200/seu_indice -H 'Content-Type: application/json' -d '
-        {
-          "aliases": {},
-          "mappings": {
-            "properties": {
-              "_class": { "type": "text", "fields": { "keyword": { "type": "keyword", "ignore_above": 256 }}},
-              "article": { "type": "text", "fields": { "keyword": { "type": "keyword", "ignore_above": 256 }}},
-              "createdDate": { "type": "date", "format": "yyyy-MM-dd'T'HH:mm:ss" },
-              "id": { "type": "text", "fields": { "keyword": { "type": "keyword", "ignore_above": 256 }}},
-              "source": { "type": "text", "fields": { "keyword": { "type": "keyword", "ignore_above": 256 }}},
-              "synonyms": { "type": "keyword" },
-              "title": { "type": "text", "fields": { "keyword": { "type": "keyword", "ignore_above": 256 }}},
-              "updatedDate": { "type": "date", "format": "yyyy-MM-dd'T'HH:mm:ss" }
-            }
-          },
-          "settings": {
-            "index": {
-              "routing": {
-                "allocation": {
-                  "include": { "_tier_preference": "data_content" }
+    command: |
+      until curl -sS -u ${ELASTIC_USERNAME}:${ELASTIC_PASSWORD} "http://localhost:9200/_cat/health?h=status" | grep -q "green\|yellow"; do
+        sleep 1
+      done
+      curl -X PUT "http://localhost:9200/term_context" -u ${ELASTIC_USERNAME}:${ELASTIC_PASSWORD} -H "Content-Type: application/json" -d'
+      {
+        "mappings": {
+          "properties": {
+            "_class": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
                 }
-              },
-              "number_of_shards": 1,
-              "number_of_replicas": 1
+              }
+            },
+            "article": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "createdDate": {
+              "type": "date",
+              "format": "yyyy-MM-dd'T'HH:mm:ss"
+            },
+            "id": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "searched": {
+              "type": "boolean"
+            },
+            "source": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "synonyms": {
+              "type": "keyword"
+            },
+            "title": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "updatedDate": {
+              "type": "date",
+              "format": "yyyy-MM-dd'T'HH:mm:ss"
             }
           }
-        }'
+        },
+        "settings": {
+          "index": {
+            "routing": {
+              "allocation": {
+                "include": {
+                  "_tier_preference": "data_content"
+                }
+              }
+            },
+            "number_of_shards": "1",
+            "provided_name": "term_context",
+            "creation_date": "1731192141984",
+            "number_of_replicas": "1",
+            "uuid": "mv7B7fyTS5WqF1wYRJAyqg",
+            "version": {
+              "created": "7172399"
+            }
+          }
+        }
+      }'
     networks:
       - graphpedia-network
     depends_on:
