@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class GetGraphService implements GetGraphUseCase {
@@ -38,8 +39,8 @@ public class GetGraphService implements GetGraphUseCase {
 
         if(termContext.isPresent() && termContext.get().isSearched()) {
             Optional<Term> optTerm = getExistingGraph(term, termContext.get());
-
-            if (optTerm.isPresent()) return optTerm.get();
+            getNodesMaxLitmit(optTerm.get());
+            return optTerm.get();
         }
 
         Term graph;
@@ -72,7 +73,15 @@ public class GetGraphService implements GetGraphUseCase {
             throw new PersistenceException("Error on save graph", exception);
         }
 
+        getNodesMaxLitmit(graph);
+
         return graph;
+    }
+
+    private static void getNodesMaxLitmit(Term graph) {
+        if(graph.getConnectionWiths().size() > MAX_SCREEN_NODES){
+            graph.setConnectionWiths(graph.getConnectionWiths().stream().limit(MAX_SCREEN_NODES).collect(Collectors.toSet()));
+        }
     }
 
     private Optional<Term> getExistingGraph(String term, TermContext termContext) {
