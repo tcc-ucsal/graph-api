@@ -3,11 +3,11 @@ package br.graphpedia.graphapi.app.mapper;
 import br.graphpedia.graphapi.app.dto.ConnectionWithDTO;
 import br.graphpedia.graphapi.app.dto.SimpleConnectionWithDTO;
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
-import br.graphpedia.graphapi.core.entity.Term;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
@@ -29,6 +29,16 @@ public interface ConnectionWithMapper {
     @Mapping(target = "targetTerm.title", source = "term")
     ConnectionWith convertSimpleConnectionWithDTOtoCore(SimpleConnectionWithDTO simpleConnectionWithDTO);
 
-    List<ConnectionWith> convertSimpleConnectionWithDTOtoCore(List<SimpleConnectionWithDTO> simpleConnectionWithDTOs);
+    default List<ConnectionWith> convertSimpleConnectionWithDTOtoCore(String mainTitle, List<SimpleConnectionWithDTO> simpleConnectionWithDTOs){
+        List<ConnectionWith> result = new ArrayList<>();
+
+        simpleConnectionWithDTOs.forEach(s -> {
+            ConnectionWith con = convertSimpleConnectionWithDTOtoCore(s);
+            con.setMainTitle(mainTitle);
+            result.add(con);
+        });
+
+        return result;
+    }
 
 }

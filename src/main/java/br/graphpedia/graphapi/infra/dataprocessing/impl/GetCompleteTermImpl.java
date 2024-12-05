@@ -24,6 +24,7 @@ public class GetCompleteTermImpl implements GetCompleteTermExternalService {
     @Override
     public CompleteTermSearchDTO execute(String term) {
         try {
+            //Map<String, Object> response = restTemplate.getForObject(getUrl("/highlight/" + term), Map.class);
             GetTermDPResponse data = restTemplate.getForObject(getUrl("/highlight/" + term), GetTermDPResponse.class);
 
             return GetTermDataProcessingApiResponseMapper.INSTANCE.toCompleteTermSearchDTO(data);

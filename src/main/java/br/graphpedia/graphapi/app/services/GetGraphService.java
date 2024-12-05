@@ -5,7 +5,6 @@ import br.graphpedia.graphapi.app.mapper.ConnectionWithMapper;
 import br.graphpedia.graphapi.core.entity.ConnectionWith;
 import br.graphpedia.graphapi.core.entity.Term;
 import br.graphpedia.graphapi.core.entity.TermContext;
-import br.graphpedia.graphapi.core.exceptions.PersistenceException;
 import br.graphpedia.graphapi.core.persistence.IContextTermRepository;
 import br.graphpedia.graphapi.core.persistence.IStructTermRepository;
 import br.graphpedia.graphapi.core.usecase.GetCompleteSearchUseCase;
@@ -70,7 +69,7 @@ public class GetGraphService implements GetGraphUseCase {
                 contextTermRepository.save(termContext.get());
             }
             structTermRepository.deleteByTitleIfNotIncomingConnections(graph.getTitle());
-            throw new PersistenceException("Error on save graph", exception);
+            throw exception;
         }
 
         getNodesMaxLitmit(graph);

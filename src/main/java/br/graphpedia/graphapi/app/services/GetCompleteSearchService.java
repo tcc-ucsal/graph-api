@@ -28,7 +28,8 @@ public class GetCompleteSearchService implements GetCompleteSearchUseCase {
         Term termResponse = new Term(result.searchedTerm());
         TermContext context = new TermContext(result.searchedTerm(), result.article(), result.source());
 
-        termResponse.setConnectionWiths(Set.copyOf(ConnectionWithMapper.INSTANCE.convertSimpleConnectionWithDTOtoCore(result.connections())));
+        termResponse.setConnectionWiths(Set.copyOf(ConnectionWithMapper.INSTANCE
+                .convertSimpleConnectionWithDTOtoCore(termResponse.getTitle(), result.connections())));
         termResponse.setContext(context);
 
         return termResponse;
