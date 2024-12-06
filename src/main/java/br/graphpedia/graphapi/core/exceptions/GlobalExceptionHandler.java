@@ -19,16 +19,30 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({IllegalAccessError.class, IllegalArgumentException.class})
-    public ResponseEntity<Object> handleBadRequestException(PersistenceException ex, WebRequest request) {
+    public ResponseEntity<Object> handleBadRequestException(IllegalArgumentException ex, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(), ex.getMessage(), LocalDateTime.now());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({ExternalApiException.class})
-    public ResponseEntity<Object> handleExternalApiException(PersistenceException ex, WebRequest request) {
+    public ResponseEntity<Object> handleExternalApiException(ExternalApiException ex, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.SERVICE_UNAVAILABLE.value(), ex.getMessage(), LocalDateTime.now());
         return new ResponseEntity<>(errorResponse, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    @ExceptionHandler({SetupException.class})
+    public ResponseEntity<Object> handleSetupException(SetupException ex, WebRequest request){
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.SERVICE_UNAVAILABLE.value(), ex.getMessage(), LocalDateTime.now());
+        return new ResponseEntity<>(errorResponse, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    @ExceptionHandler({ResourceNotFoundException.class})
+    public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request){
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(), ex.getMessage(), LocalDateTime.now());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 }

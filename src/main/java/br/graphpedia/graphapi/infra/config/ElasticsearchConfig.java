@@ -1,10 +1,12 @@
 package br.graphpedia.graphapi.infra.config;
 
+import br.graphpedia.graphapi.core.exceptions.SetupException;
 import br.graphpedia.graphapi.infra.database.elasticsearch.entity.TermContextEntity;
 import br.graphpedia.graphapi.infra.database.elasticsearch.repository.ElasticsearchContextTermRepository;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
@@ -14,7 +16,7 @@ import org.springframework.data.elasticsearch.client.ClientConfiguration;
 
 @org.springframework.context.annotation.Configuration
 @EnableElasticsearchRepositories(basePackageClasses = {ElasticsearchContextTermRepository.class})
-public class ElasticsearchConfig {
+public class ElasticsearchConfig implements ApplicationRunner {
 
     @Value("${spring.elasticsearch.uris}")
     private String elasticsearchUri;
@@ -42,8 +44,8 @@ public class ElasticsearchConfig {
 
     }
 
-    @PostConstruct
-    public void verifyAndCreateIndexOnStartup() {
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
         String indexName = "term_context";
         Class<?> entityClass = TermContextEntity.class;
 
@@ -58,15 +60,11 @@ public class ElasticsearchConfig {
                             elasticsearchOperations.indexOps(entityClass).createMapping()
                     );
                 } else {
-                    throw new RuntimeException("Elastic Search index error: " + indexName);
+                    throw new SetupException("Elastic Search index error: " + indexName);
                 }
             }
         }catch (Exception e){
-            throw new RuntimeException(e);
+            throw new SetupException(e);
         }
-
-
     }
-
-
 }
