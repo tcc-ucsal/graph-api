@@ -14,8 +14,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.MessageFormat;
-
 import static br.graphpedia.graphapi.infra.dataprocessing.tools.DataProcessingUtils.getUrl;
 
 @Component
@@ -31,17 +29,13 @@ public class GetCompleteTermImpl implements GetCompleteTermExternalService {
         try {
             ResponseEntity<GetTermDPResponse> data = restTemplate.getForEntity(getUrl("/highlight/" + term), GetTermDPResponse.class);
 
-            if(data.getStatusCode().equals(HttpStatus.NOT_FOUND)){
-                throw new ResourceNotFoundException(MessageFormat.format("Data-processing-error: {0} - Article not found", data.getStatusCode()));
-            }
-
-            if(data.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR)){
-                throw new ExternalApiException(MessageFormat.format("Data-processing-error: {0} - {1}", data.getStatusCode(), data.getBody()));
-            }
-
             return GetTermDataProcessingApiResponseMapper.INSTANCE.toCompleteTermSearchDTO(data.getBody());
 
         } catch (HttpClientErrorException | HttpServerErrorException e ) {
+            if(e.getStatusCode().equals(HttpStatus.NOT_FOUND)){
+                throw new ResourceNotFoundException("Data-processing-error: 404 - Article not found");
+            }
+
             throw new ExternalApiException("Data-processing-error: " + e.getStatusCode() + " - " + e.getMessage(), e);
 
         } catch (Exception e) {
