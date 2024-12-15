@@ -22,7 +22,6 @@ public class GetSearchOptionsImpl implements GetSearchOptionsExternalService {
     }
     @Override
     public List<String> execute(String term) {
-        ResponseEntity<SearchOptionsDataProcessingApiResponse> data2 = restTemplate.getForEntity(getUrl("/get_search_options/" + term + "/4"), SearchOptionsDataProcessingApiResponse.class);
         SearchOptionsDataProcessingApiResponse data = restTemplate.getForObject(getUrl("/get_search_options/" + term + "/4"), SearchOptionsDataProcessingApiResponse.class);
 
         return Objects.isNull(data) ? List.of() :  data.results();
