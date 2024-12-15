@@ -55,7 +55,7 @@ public class NeedForContextInterceptor implements HandlerInterceptor {
 
     private String extractTermFromRequest(HttpServletRequest request) {
         String uri = request.getRequestURI();
-        Pattern pattern = Pattern.compile("/term/([^/]+)");
+        Pattern pattern = Pattern.compile(".*/([^/]+)$");
         Matcher matcher = pattern.matcher(uri);
 
         if (matcher.find()) {
