@@ -31,9 +31,11 @@ public class NeedForContextInterceptor implements HandlerInterceptor {
     @Override 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        List<String> contexts = verifyNeedForContextUseCase.execute(extractTermFromRequest(request));
+        String term = extractTermFromRequest(request);
+        List<String> contexts = verifyNeedForContextUseCase.execute(term);
 
-        if (Objects.nonNull(contexts) && !contexts.isEmpty()) {
+        if ((Objects.nonNull(contexts) && !contexts.isEmpty()) &&
+                contexts.stream().noneMatch(c -> c.equalsIgnoreCase(term))) {
             ObjectMapper objectMapper = new ObjectMapper();
             ArrayNode contextNode = objectMapper.createArrayNode();
             for (String context : contexts) {
